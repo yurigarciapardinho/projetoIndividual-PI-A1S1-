@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zumbi dos Palmeiras</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="cabecalhoPrincipal">
+    <div class="logoSite">ZUMBI DOS PALMEIRAS</div>
+    <nav class="navegacaoPrincipal">
+      <a href="#" class="linkNavegacao-ativo">Início</a>
+      <a href="#" class="linkNavegacao">Manifesto</a>
+      <a href="#" class="linkNavegacao">História</a>
+      <a href="#" class="linkNavegacao">Lutas</a>
+    </nav>
+    <button class="botaoDestaque">CONHEÇA O MOVIMENTO</button>
+  </header>
+
+  <main class="conteudoPrincipal">
+    <section class="secaoHero">
+      <h1 class="tituloPrincipal">PALMEIRENSES PRETOS, PERIFÉRICOS E DE QUEBRADA</h1>
+      <p class="textoPrincipal">Um movimento que usa o amor ao clube como ponto de partida para disputar visibilidade, combater o racismo e reivindicar um futebol mais popular.</p>
+      <div class="grupoBotoes">
+        <button class="botaoPrimario">LER MANIFESTO</button>
+        <button class="botaoSecundario">VER GALERIA</button>
+      </div>
+    </section>
+
+    <section class="secaoSobre">
+      <h2 class="tituloSecao">O QUE É O ZUMBI DOS PALMEIRAS?</h2>
+      <p class="textoSobre">O Zumbi dos Palmeiras não é uma torcida organizada tradicional. É para além disso, um coletivo político-cultural de torcedores.</p>
+      <p class="textoSobre">A pauta central é que existem palmeirenses pretos, periféricos e de quebrada e eles foram invisibilizados por uma imagem branca, italiana e elitizada do clube.</p>
+      <p class="textoSobre">Renato Porto de Oliveira explica que o ZDP surgiu para demarcar espaço, combatendo o estereótipo de "time de italiano" ou "time de boy". O coletivo quer disputar identidade, pertencimento, memória e acesso ao estádio.</p>
+    </section>
+
+    <section class="secaoFormulario">
+      <h3 class="tituloFormulario">Faça Parte</h3>
+      <p class="textoFormulario">Receba nossas novidades e fortaleça o movimento.</p>
+      <div class="grupoEntrada">
+        <input type="email" id="inputEmail" class="campoEntrada" placeholder="Seu e-mail">
+        <button id="botaoInscrever" class="botaoInscrever" onclick="inscreverNewsletter()">INSCREVER</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodapePrincipal">
+    <p class="textoRodape">2026 Zumbi dos Palmeiras. Site independente e autogestionado.</p>
+  </footer>
+
+  <script>
+
+    function validacoes() {
+    const emailInformado = inputEmail.value.trim().toLowerCase()
+    const possuiArroba = emailInformado.includes('@')
+    const possuiPonto = emailInformado.includes('.')
+    const emailValido = emailInformado.length > 2
+    
+    const inputsValidos = possuiArroba && possuiPonto && emailValido
+
+    if (!inputsValidos) {
+        alert('Por favor preencha um e-mail válido com @ e ponto')
+        inputEmail.value = ''
+        return false
+    }
+
+    return true
+    }
+
+    function inscreverNewsletter() {
+    if (!validacoes()) {
+        return
+    }
+
+    alert('Inscrição realizada com sucesso no movimento Zumbi dos Palmeiras')
+    inputEmail.value = ''
+    }
+
+  </script>>
+</body>
+</html>

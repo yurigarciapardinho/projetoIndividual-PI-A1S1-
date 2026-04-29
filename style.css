@@ -1,0 +1,174 @@
+body {
+  margin: 0px;
+  font-family: Arial, sans-serif;
+  background-color: #0b1c14;
+  color: #ffffff;
+}
+
+.cabecalhoPrincipal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 5%;
+  background-color: #050e0a;
+}
+
+.logoSite {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.navegacaoPrincipal {
+  display: flex;
+  gap: 20px;
+}
+
+.linkNavegacao {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.linkNavegacao-ativo {
+  color: #d4af37;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.linkNavegacao-ativo:hover {
+  color: #c9a42c;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.botaoDestaque {
+  background-color: #d4af37;
+  color: #000000;
+  border: 0px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.botaoDestaque:hover {
+  background-color: #c8a227;
+  color: #000000;
+  border: 0px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.secaoHero {
+  padding: 80px 5%;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tituloPrincipal {
+  font-size: 60px;
+  color: #ffffff;
+  width: 60%;
+  margin: 0px 0px 20px 0px;
+}
+
+.textoPrincipal {
+  font-size: 20px;
+  width: 50%;
+  margin: 0px 0px 40px 0px;
+  line-height: 1.5;
+}
+
+.grupoBotoes {
+  display: flex;
+  gap: 20px;
+}
+
+.botaoPrimario {
+  background-color: #1a8e4a;
+  color: #ffffff;
+  border: 0px;
+  padding: 15px 30px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.botaoSecundario {
+  background-color: transparent;
+  color: #d4af37;
+  border: 2px solid #d4af37;
+  padding: 13px 30px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.secaoSobre {
+  padding: 60px 5%;
+  background-color: #0a140f;
+}
+
+.tituloSecao {
+  font-size: 32px;
+  color: #ffffff;
+  margin: 0px 0px 30px 0px;
+}
+
+.textoSobre {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 0px 0px 20px 0px;
+  width: 80%;
+}
+
+.secaoFormulario {
+  padding: 40px 5%;
+  background-color: #050e0a;
+}
+
+.tituloFormulario {
+  font-size: 24px;
+  margin: 0px 0px 10px 0px;
+}
+
+.textoFormulario {
+  font-size: 16px;
+  margin: 0px 0px 20px 0px;
+}
+
+.grupoEntrada {
+  display: flex;
+  gap: 10px;
+}
+
+.campoEntrada {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #1a8e4a;
+  background-color: transparent;
+  color: #ffffff;
+}
+
+.botaoInscrever {
+  background-color: #1a8e4a;
+  color: #ffffff;
+  border: 0px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.rodapePrincipal {
+  text-align: center;
+  padding: 20px;
+  background-color: #000000;
+}
+
+.textoRodape {
+  margin: 0px;
+  font-size: 14px;
+  color: #888888;
+}
