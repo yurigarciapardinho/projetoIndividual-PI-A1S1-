@@ -1,0 +1,100 @@
+.conteudoAcesso {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 30px 5%;
+}
+
+.cartaoAcesso {
+    display: flex;
+    flex-direction: column;
+    background-color: #050e0a;
+    border: 1px solid #1a8e4a;
+    padding: 40px;
+    width: 100%;
+    max-width: 440px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.tituloFormulario {
+    color: #d4af37;
+    margin: 0px 0px 24px 0px;
+    text-align: center;
+    font-size: 26px;
+    line-height: 34px;
+}
+
+.campo {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.rotuloCampo {
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.inputYgp {
+    width: 100%;
+    padding: 12px;
+    background-color: #0b1c14;
+    border: 1px solid #1a8e4a;
+    color: #ffffff;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.inputYgp:focus {
+    border: 1px solid #d4af37;
+}
+
+.botaoAcesso {
+    width: 100%;
+    padding: 13px;
+    background-color: #1a8e4a;
+    color: #ffffff;
+    border: 0px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.botaoAcesso:hover {
+    background-color: #146d39;
+}
+
+.textoTroca {
+    text-align: center;
+    margin: 20px 0px 0px 0px;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.linkTroca {
+    color: #d4af37;
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+@media (max-width: 700px) {
+    .conteudoAcesso {
+        align-items: flex-start;
+        padding: 25px 5%;
+    }
+
+    .cartaoAcesso {
+        padding: 28px;
+        max-width: 100%;
+    }
+
+    .tituloFormulario {
+        font-size: 22px;
+        line-height: 30px;
+    }
+}

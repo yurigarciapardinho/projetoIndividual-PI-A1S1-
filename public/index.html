@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zumbi dos Palmeiras</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+  <header class="cabecalhoPrincipal">
+    <div class="logoSite">ZUMBI DOS PALMEIRAS</div>
+    <nav class="navegacaoPrincipal">
+      <a href="#" class="linkNavegacaoAtivo">Início</a>
+      <a href="#" class="linkNavegacao">Manifesto</a>
+      <a href="historia.html" class="linkNavegacao">História</a>
+      <a href="#" class="linkNavegacao">Lutas</a>
+    </nav>
+    <button class="botaoDestaque"  onclick="window.location='historia.html'">CONHEÇA O MOVIMENTO</button>
+  </header>
+
+  <main class="conteudoPrincipal">
+    <section class="secaoHero">
+      <h1 class="tituloPrincipal">PALMEIRENSES PRETOS, PERIFÉRICOS E DE QUEBRADA</h1>
+      <p class="textoPrincipal">Um movimento que usa o amor ao clube como ponto de partida para disputar visibilidade, combater o racismo e reivindicar um futebol mais popular.</p>
+      <div class="grupoBotoes">
+        <button class="botaoPrimario">LER MANIFESTO</button>
+        <button class="botaoSecundario">VER GALERIA</button>
+      </div>
+    </section>
+
+    <section class="secaoSobre" id="secaoSobre">
+      <h2 class="tituloSecao">Nossa Identidade</h2>
+      <p class="textoSobre">Ocupar espaço, combatendo o estereótipo de "time de italiano" ou "time de boy". O coletivo quer disputar identidade, pertencimento, memória e acesso ao estádio.</p>
+    </section>
+
+    <section id="secaoFormulario" class="secaoFormulario">
+      <h3 class="tituloFormulario">Faça Parte</h3>
+      <p class="textoFormulario">Receba nossas novidades e fortaleça o movimento.</p>
+      <div class="grupoEntrada">
+        <input type="email" id="inputEmail" class="campoEntrada" placeholder="Seu e-mail">
+        <button id="botaoInscrever" class="botaoInscrever" onclick="inscreverNewsletter()">INSCREVER</button>
+      </div>
+    </section>
+
+
+      <section id="secaoFormularioConcluido" class="secaoFormulario" style="display: none;">
+      <h3 class="tituloFormulario">Parabéns, você está inscrito!</h3>
+      <p class="textoFormulario">Irá receber todas as noticias do movimento.</p>
+    </section>
+
+  </main>
+
+  <footer class="rodapePrincipal">
+    <p class="textoRodape">2026 Zumbi dos Palmeiras. Site independente e autogestionado.</p>
+  </footer>
+
+  <script src="js/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso - Zumbi dos Palmeiras</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/acesso.css">
+</head>
+<body>
+
+    <header class="cabecalhoPrincipal">
+        <div class="logoSite" onclick="window.location='index.html'" style="cursor:pointer">ZUMBI DOS PALMEIRAS</div>
+        <nav class="navegacaoPrincipal">
+            <a href="index.html" class="linkNavegacao">Início</a>
+        </nav>
+    </header>
+
+    <main class="conteudoAcesso">
+        <div id="telaLogin" class="cartaoAcesso">
+            <h2 class="tituloFormulario">Entrar na Comunidade</h2>
+            <div class="campo">
+                <label class="rotuloCampo">E-mail:</label>
+                <input type="text" id="inputEmailLogin" class="inputYgp">
+            </div>
+            <div class="campo">
+                <label class="rotuloCampo">Senha:</label>
+                <input type="password" id="inputSenhaLogin" class="inputYgp">
+            </div>
+            <button class="botaoAcesso" onclick="logar()">ENTRAR</button>
+            <p class="textoTroca">Não tem conta? <span onclick="alternarTelas()" class="linkTroca">Cadastre-se</span></p>
+        </div>
+
+        <div id="telaCadastro" class="cartaoAcesso" style="display: none">
+            <h2 class="tituloFormulario">Cadastro</h2>
+            <div class="campo">
+                <label class="rotuloCampo">Nome Completo:</label>
+                <input type="text" id="inputNome" class="inputYgp">
+            </div>
+            <div class="campo">
+                <label class="rotuloCampo">E-mail:</label>
+                <input type="text" id="inputEmail" class="inputYgp">
+            </div>
+            <div class="campo">
+                <label class="rotuloCampo">Etnia:</label>
+                <select id="selectEtnia" class="inputYgp">
+                    <option value="">Selecione</option>
+                    <option value="Preto">Preto</option>
+                    <option value="Pardo">Pardo</option>
+                    <option value="Branco">Branco</option>
+                    <option value="Indígena">Indígena</option>
+                    <option value="Amarelo">Amarelo</option>
+                </select>
+            </div>
+            <div class="campo">
+                <label class="rotuloCampo">Seu bairro:</label>
+                <input type="text" id="inputOrigem" class="inputYgp" placeholder="Ex: ZL - Itaquera">
+            </div>
+            <div class="campo">
+                <label class="rotuloCampo">Senha:</label>
+                <input type="password" id="inputSenha" class="inputYgp">
+            </div>
+            <div class="campo">
+                <label class="rotuloCampo">Confirmar Senha:</label>
+                <input type="password" id="inputConfirmacao" class="inputYgp">
+            </div>
+            <button class="botaoAcesso" onclick="cadastrar()">CADASTRAR</button>
+            <p class="textoTroca">Já é do movimento? <span onclick="alternarTelas()" class="linkTroca">Faça Login</span></p>
+        </div>
+    </main>
+
+    <footer class="rodapePrincipal">
+        <p>Zumbi dos Palmeiras © 2026 - Identidade e Pertencimento</p>
+    </footer>
+
+    <script src="js/acesso.js"></script>
+</body>
+</html>

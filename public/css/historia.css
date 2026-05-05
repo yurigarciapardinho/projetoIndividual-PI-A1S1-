@@ -1,0 +1,253 @@
+.conteudoHistoria {
+    width: 100%;
+}
+
+.secaoAberturaHistoria {
+    min-height: 70vh;
+    padding: 90px 5%;
+    background-color: #07130d;
+    border-bottom: 1px solid #1a8e4a;
+}
+
+.etiquetaHistoria {
+    color: #d4af37;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin: 0px 0px 18px 0px;
+}
+
+.tituloHistoria {
+    width: 75%;
+    color: #ffffff;
+    font-size: 58px;
+    line-height: 64px;
+    margin: 0px 0px 25px 0px;
+}
+
+.textoAberturaHistoria {
+    width: 58%;
+    color: #d7d7d7;
+    font-size: 20px;
+    line-height: 32px;
+    margin: 0px 0px 40px 0px;
+}
+
+.grupoBotoesHistoria {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.botaoPrimarioHistoria {
+    background-color: #1a8e4a;
+    color: #ffffff;
+    border: 0px;
+    padding: 15px 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.botaoPrimarioHistoria:hover {
+    background-color: #146d39;
+}
+
+.botaoSecundarioHistoria {
+    background-color: transparent;
+    color: #d4af37;
+    border: 2px solid #d4af37;
+    padding: 13px 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.botaoSecundarioHistoria:hover {
+    background-color: #d4af37;
+    color: #000000;
+}
+
+.secaoPerguntaHistoria {
+    padding: 70px 5%;
+    background-color: #0b1c14;
+}
+
+.cartaoPerguntaHistoria {
+    background-color: #050e0a;
+    border-left: 6px solid #d4af37;
+    padding: 40px;
+    width: 75%;
+}
+
+.tituloPerguntaHistoria {
+    color: #d4af37;
+    font-size: 34px;
+    margin: 0px 0px 20px 0px;
+}
+
+.textoPerguntaHistoria {
+    color: #ffffff;
+    font-size: 19px;
+    line-height: 31px;
+    margin: 0px;
+}
+
+.secaoOrigemHistoria {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    padding: 80px 5%;
+    background-color: #0a140f;
+}
+
+.blocoTextoHistoria {
+    width: 60%;
+}
+
+.tituloSecaoHistoria {
+    color: #d4af37;
+    font-size: 36px;
+    margin: 0px 0px 25px 0px;
+}
+
+.textoSecaoHistoria {
+    color: #e4e4e4;
+    font-size: 18px;
+    line-height: 30px;
+    margin: 0px 0px 20px 0px;
+}
+
+.cartaoFraseHistoria {
+    width: 32%;
+    background-color: #050e0a;
+    border: 1px solid #1a8e4a;
+    padding: 35px;
+}
+
+.fraseDestaqueHistoria {
+    color: #ffffff;
+    font-size: 30px;
+    line-height: 38px;
+    font-weight: bold;
+    margin: 0px 0px 20px 0px;
+}
+
+.textoFraseHistoria {
+    color: #d4af37;
+    font-size: 16px;
+    line-height: 26px;
+    margin: 0px;
+}
+
+.secaoLinhaHistoria {
+    padding: 80px 5%;
+    background-color: #0b1c14;
+}
+
+.areaLinhaHistoria {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+
+.itemLinhaHistoria {
+    width: 45%;
+    background-color: #050e0a;
+    border: 1px solid #1a8e4a;
+    padding: 30px;
+}
+
+.anoLinhaHistoria {
+    color: #d4af37;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin: 0px 0px 15px 0px;
+}
+
+.tituloItemHistoria {
+    color: #ffffff;
+    font-size: 24px;
+    margin: 0px 0px 15px 0px;
+}
+
+.textoItemHistoria {
+    color: #d7d7d7;
+    font-size: 16px;
+    line-height: 26px;
+    margin: 0px;
+}
+
+.secaoMemoriaHistoria {
+    padding: 90px 5%;
+    background-color: #07130d;
+}
+
+.areaMemoriaHistoria {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.cartaoMemoriaHistoria {
+    width: 65%;
+    background-color: #050e0a;
+    border-top: 6px solid #1a8e4a;
+    padding: 45px;
+}
+
+.secaoImportanciaHistoria {
+    padding: 80px 5%;
+    background-color: #0a140f;
+}
+
+.gradeImportanciaHistoria {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+
+.cartaoImportanciaHistoria {
+    width: 28%;
+    min-height: 190px;
+    background-color: #050e0a;
+    border: 1px solid #1a8e4a;
+    padding: 30px;
+}
+
+.secaoChamadoHistoria {
+    padding: 90px 5%;
+    text-align: center;
+    background-color: #0b1c14;
+    border-top: 1px solid #1a8e4a;
+}
+
+.tituloChamadoHistoria {
+    color: #ffffff;
+    font-size: 40px;
+    line-height: 48px;
+    margin: 0px auto 25px auto;
+    width: 70%;
+}
+
+.textoChamadoHistoria {
+    color: #d7d7d7;
+    font-size: 18px;
+    line-height: 30px;
+    margin: 0px auto 25px auto;
+    width: 60%;
+}
+
+.textoChamadoForteHistoria {
+    color: #d4af37;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0px 0px 35px 0px;
+}
+
+.link{  
+    color: #1a8e4a;
+    font-size: 14px;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
