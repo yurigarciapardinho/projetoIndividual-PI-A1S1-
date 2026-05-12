@@ -1,12 +1,17 @@
 var usuarioModel = require("../models/usuarioModel");
 
 function cadastrar(req, res) {
+    // Obrigatórios
     var nome = req.body.nomeServer;
     var email = req.body.emailServer;
     var dataNascimento = req.body.dataNascimentoServer;
     var etnia = req.body.etniaServer;
     var bairro = req.body.bairroServer;
     var senha = req.body.senhaServer;
+
+    // Opcionais
+    var foto = req.body.fotoServer;
+    var fkIndicador = req.body.fkIndicadorServer;
 
     if (nome == undefined) {
         res.status(400).send("Seu nome está undefined!");
@@ -21,15 +26,22 @@ function cadastrar(req, res) {
     } else if (senha == undefined) {
         res.status(400).send("Sua senha está undefined!");
     } else {
-        usuarioModel.cadastrar(nome, email, senha, dataNascimento, etnia, bairro)
+        usuarioModel.cadastrar(nome, email, senha, dataNascimento, etnia, bairro, foto, fkIndicador)
             .then(function (resultado) {
                 res.status(200).json(resultado);
             })
             .catch(function (erro) {
-                console.log(erro);
-                console.log("\nHouve um erro ao realizar o cadastro! Erro: ", erro.sqlMessage);
+            console.log(erro);
+            console.log("\nHouve um erro ao realizar o cadastro! Erro: ", erro.sqlMessage);
+            
+            if (erro.sqlMessage.includes("foreign key constraint fails")) {
+                res.status(400).send("Código de indicação inválido! Verifique o número e tente novamente.");
+            } else if (erro.sqlMessage.includes("Duplicate entry") && erro.sqlMessage.includes("email")) {  
+                res.status(400).send("Email já cadastrado! Verifique o email e tente novamente.");
+            }  else {
                 res.status(500).json(erro.sqlMessage);
-            });
+            }
+        });
     }
 }
 

@@ -1,6 +1,6 @@
 // =========================================================
 // MÁSCARA PARA DATA DE NASCIMENTO (DD/MM/AAAA)
-// Chamada diretamente no HTML com: oninput="mascaraData(this)"
+// oninput="mascaraData(this)""
 // =========================================================
 function mascaraData(inputDataNascimento) {
     // Pega o valor do campo de data de nascimento e remove tudo que não é número
@@ -70,6 +70,9 @@ function validacoes() {
     const bairroInformado = inputBairro.value.toLowerCase().trim()
     const senhaInformada = inputSenha.value
     const confirmacaoInformada = inputConfirmacao.value
+
+    const fotoInformada = inputFoto.value.trim().toLowerCase()
+    const indicadorInformado = inputIndicador.value.trim()
 
     const nomePreenchido = nomeInformado !== ''
     const emailPossuiArroba = emailInformado.includes('@')
@@ -148,10 +151,17 @@ function cadastrar() {
         const etniaInformada = selectEtnia.value.trim()
         const bairroInformado = inputBairro.value.trim()
         const senhaInformada = inputSenha.value
+        
+        // NOVO: Capturando os dados opcionais
+        const fotoInformada = inputFoto.value.trim()
+        const indicadorInformado = inputIndicador.value.trim()
 
         const dataNascimentoBR = inputDataNascimento.value;
         const partesData = dataNascimentoBR.split('/');
         const dataNascimentoUS = `${partesData[2]}-${partesData[1]}-${partesData[0]}`;
+
+        const foto = fotoInformada === '' ? null : fotoInformada;
+        const indicador = indicadorInformado === '' ? null : indicadorInformado;
 
         fetch("/usuarios/cadastrar", {
             method: "POST",
@@ -164,14 +174,27 @@ function cadastrar() {
                 dataNascimentoServer: dataNascimentoUS,
                 etniaServer: etniaInformada,
                 bairroServer: bairroInformado,
-                senhaServer: senhaInformada
+                senhaServer: senhaInformada,
+                fotoServer: foto,
+                fkIndicadorServer: indicador
             })
         }).then(function (resposta) {
             if (resposta.ok) {
-                window.location = "index.html"
+                alert("Cadastro realizado com sucesso! Faça login para entrar na nossa bancada.");
+                alternarTelas(); // Volta para a tela de login
             } else {
                 resposta.text().then(function (texto) {
                     alert(texto || "Houve um erro ao tentar realizar o cadastro.")
+
+                    if (texto.includes("Código de indicação inválido!")) {
+                        inputIndicador.value = ""; 
+                        inputIndicador.focus();    
+                    }
+
+                     if (texto.includes("Código de indicação inválido!")) {
+                        inputIndicador.value = ""; 
+                        inputIndicador.focus();    
+                    }
                 })
             }
         }).catch(function (erro) {
@@ -206,6 +229,8 @@ function logar() {
                     sessionStorage.ETNIA_USUARIO = usuario.etnia
                     sessionStorage.BAIRRO_USUARIO = usuario.bairro
                     sessionStorage.FK_INDICADOR = usuario.fkIndicador
+                    sessionStorage.FOTO_USUARIO = usuario.foto 
+                    
                     sessionStorage.USUARIO = JSON.stringify(usuario)
 
                     window.location = "index.html"

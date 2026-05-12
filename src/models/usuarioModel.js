@@ -1,10 +1,10 @@
 var database = require("../database/config");
 
-function cadastrar(nome, email, senha, dataNascimento, etnia, bairro) {
-    // Alinhado com as colunas do seu novo BD
+function cadastrar(nome, email, senha, dataNascimento, etnia, bairro, foto, fkIndicador) {
+    
     var instrucaoSql = `
-        INSERT INTO usuario (nome, email, senha, dataNascimento, etnia, bairro)
-        VALUES ('${nome}', '${email}', '${senha}', '${dataNascimento}', '${etnia}', '${bairro}');
+        INSERT INTO usuario (nome, email, senha, dataNascimento, etnia, bairro, foto, fkIndicador)
+        VALUES ('${nome}', '${email}', '${senha}', '${dataNascimento}', '${etnia}', '${bairro}', '${foto}', ${fkIndicador});
     `;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
@@ -12,9 +12,8 @@ function cadastrar(nome, email, senha, dataNascimento, etnia, bairro) {
 }
 
 function autenticar(email, senha) {
-    // Busca os dados exatos do seu banco para devolver para a sessão
     var instrucaoSql = `
-        SELECT idUsuario, nome, email, dataNascimento, etnia, bairro, fkIndicador
+        SELECT idUsuario, nome, email, dataNascimento, etnia, bairro, foto, fkIndicador
         FROM usuario
         WHERE email = '${email}' AND senha = '${senha}';
     `;
