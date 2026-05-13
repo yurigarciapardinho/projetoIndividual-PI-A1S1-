@@ -1,0 +1,128 @@
+/* =========================================================
+   Paleta: Verde Palestra, Ouro Ancestral, Terracota e Off-White
+========================================================= */
+
+body {
+    background-color: #fdfbf7; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #0a3b1a; 
+    margin: 0;
+}
+
+.conteudoDashboard {
+    padding: 40px 10%;
+    min-height: 80vh;
+}
+
+.secaoKpis {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; 
+    margin-bottom: 40px;
+    gap: 20px;
+}
+
+.cartaoKpi {
+    background-color: #ffffff;
+    flex: 1; 
+    min-width: 220px; 
+    padding: 30px 20px;
+    border-radius: 12px; 
+    box-shadow: 0 4px 15px rgba(10, 59, 26, 0.08); 
+    text-align: center;
+    border-top: 6px solid #0a3b1a; 
+    box-sizing: border-box;
+}
+
+.cardVerde {
+    border-top-color: #0a3b1a; 
+}
+
+.cardVerde h1 {
+    color: #0a3b1a;
+}
+
+.cardOuro {
+    border-top-color: #d4af37; 
+}
+
+.cardOuro h1 {
+    color: #d4af37;
+}
+
+.cartaoKpi h3 {
+    font-size: 18px; 
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.cartaoKpi h1 {
+    font-size: 46px; 
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.textoReflexivo {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    margin-top: 10px;
+}
+
+.secaoGraficos {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.cartaoGrafico {
+    background-color: #ffffff;
+    width: calc(50% - 10px); 
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(10, 59, 26, 0.08);
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.cartaoGrafico h3 {
+    color: #0a3b1a;
+    font-size: 22px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.descricaoGrafico {
+    text-align: center;
+    color: #8b5a2b; 
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+.areaCanvas {
+    width: 100%;
+    height: 300px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+
+.btnSair {
+    background-color: transparent;
+    color: #0a3b1a;
+    border: 2px solid #0a3b1a;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.btnSair:hover {
+    background-color: #0a3b1a;
+    color: #d4af37;
+    border: 2px solid #0a3b1a;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+}

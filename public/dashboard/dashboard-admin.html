@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inteligência Admin - Zumbi dos Palmeiras</title>
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard-admin.css">
+    
+    <script src="../js/sessao.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body onload="carregarDadosAdmin()">
+
+    <header class="cabecalhoPrincipal">
+        <div class="logoSite" onclick="window.location='../index.html'" style="cursor:pointer">
+            ZUMBI DOS PALMEIRAS - ADMIN
+        </div>
+        <nav class="navegacaoPrincipal">
+            <a href="../index.html" class="linkNavegacao">Retornar</a>
+        </nav>
+        <nav class="navegacaoPrincipal">
+            <a href="../index.html" onclick="limparSessao()" class="linkNavegacao btnSair">Sair</a>
+        </nav>
+    </header>
+
+    <main class="conteudoDashboard">
+        
+        <section class="secaoKpis">
+            
+            <div class="cartaoKpi cardVerde">
+                <h3>Vozes na Bancada</h3>
+                <h1 id="kpiTotalMembros">--</h1> 
+                <p id="msgTotalMembros" class="textoReflexivo">Total de membros registrados</p>
+            </div>
+
+            <div class="cartaoKpi cardVerde">
+                <h3>Vozes de Hoje</h3>
+                <h1 id="kpiCadastrosHoje">--</h1>
+                <p id="msgCadastrosHoje" class="textoReflexivo">Novos membros nas últimas 24h</p>
+            </div>
+            
+            <div class="cartaoKpi cardOuro">
+                <h3>Representatividade</h3>
+                <h1 id="kpiIndiceRepresentatividade">--%</h1>
+                <p id="msgRepresentatividade" class="textoReflexivo">Sentem-se representados pelo clube</p>
+            </div>
+
+            <div class="cartaoKpi cardOuro">
+                <h3>Força Recente</h3>
+                <h1 id="kpiEtniaRecente" style="font-size: 28px;">--</h1>
+                <p id="msgEtniaRecente" class="textoReflexivo">Etnia com mais adesão recente<small>7 dias</small></p>
+            </div>
+
+        </section>
+
+        <section class="secaoGraficos">
+            
+            <div class="cartaoGrafico">
+                <h3>A Nossa Face</h3>
+                <p class="descricaoGrafico">Distribuição étnica geral da comunidade</p>
+                <div class="areaCanvas">
+                    <canvas id="canvasEtnia"></canvas>
+                </div>
+            </div>
+            
+            <div class="cartaoGrafico">
+                <h3>Consciência vs. Vivência</h3>
+                <p class="descricaoGrafico">Índice de acerto e sentimento por categoria</p>
+                <div class="areaCanvas">
+                    <canvas id="canvasCategorias"></canvas>
+                </div>
+            </div>
+
+            <div class="cartaoGrafico">
+                <h3>Gerações da Bancada</h3>
+                <p class="descricaoGrafico">Sementes, Juventude, Resistência e Ancestralidade</p>
+                <div class="areaCanvas">
+                    <canvas id="canvasGeracoes"></canvas>
+                </div>
+            </div>
+
+            <div class="cartaoGrafico">
+                <h3>A Marcha do Movimento</h3>
+                <p class="descricaoGrafico">Evolução de cadastros ao longo do tempo</p>
+                <div class="areaCanvas">
+                    <canvas id="canvasCrescimento"></canvas>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="rodapePrincipal">
+        <p>Zumbi dos Palmeiras © 2026 - Inteligência Analítica e Identidade</p>
+    </footer>
+
+    <script src="../js/dashboard-admin.js"></script>
+</body>
+</html>

@@ -11,6 +11,7 @@
         etnia VARCHAR(50),
         bairro VARCHAR(100),
         foto VARCHAR(500), -- Campo para o link da foto do perfil
+        dtCriacao DATETIME DEFAULT CURRENT_TIMESTAMP,
         fkIndicador INT, 
         CONSTRAINT fk_usuario_indicador FOREIGN KEY (fkIndicador) REFERENCES usuario(idUsuario)
     );
@@ -30,16 +31,14 @@
         CONSTRAINT fk_resposta_usuario FOREIGN KEY (fkUsuario) REFERENCES usuario(idUsuario),
         CONSTRAINT fk_resposta_pergunta FOREIGN KEY (fkPergunta) REFERENCES pergunta(idPergunta)
     );
-    -- ==========================================
-    -- INSERTS DE TESTE PARA O SEU DASHBOARD
-    -- ==========================================
+
 
     -- 1. Inserindo Usuários
-    -- Yuri (Fundador)
+    -- Yuri (Fundador e Adminstrador)
     INSERT INTO usuario (nome, email, senha, dataNascimento, etnia, bairro, fkIndicador) 
     VALUES ('Yuri Pardinho', 'yuri@zumbipalmeiras.com', 'Amarelo,18', '2007-06-10', 'Branco', 'ZL - Guaianases', NULL);
 
-    -- João (Indicado pelo Yuri - fk 1)
+    -- João (Indicado por Yuri - fk 1)
     INSERT INTO usuario (nome, email, senha, dataNascimento, etnia, bairro, fkIndicador) 
     VALUES ('João da Silva', 'joao@email.com', 'senha123', '1998-10-20', 'Pardo', 'ZL - Artur Alvim', 1);
 
@@ -47,7 +46,7 @@
     INSERT INTO usuario (nome, email, senha, dataNascimento, etnia, bairro, fkIndicador) 
     VALUES ('Maria Rita', 'maria@email.com', 'senha123', '2001-02-10', 'Preto', 'ZO - Osasco', 1);
 
-    -- Carlos (Chegou de forma orgânica, sem indicação)
+    -- Carlos (Chegou sem indicação)
     INSERT INTO usuario (nome, email, senha, dataNascimento, etnia, bairro, fkIndicador) 
     VALUES ('Carlos Eduardo', 'cadu@email.com', 'senha123', '1995-11-05', 'Indígena', 'ZS - Grajaú', NULL);
 

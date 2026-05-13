@@ -1,6 +1,6 @@
 // =========================================================
-// MÁSCARA PARA DATA DE NASCIMENTO (DD/MM/AAAA)
-// oninput="mascaraData(this)""
+// (DD/MM/AAAA)
+// oninput="mascaraData(this)"
 // =========================================================
 function mascaraData(inputDataNascimento) {
     // Pega o valor do campo de data de nascimento e remove tudo que não é número
@@ -233,7 +233,13 @@ function logar() {
                     
                     sessionStorage.USUARIO = JSON.stringify(usuario)
 
-                    window.location = "index.html"
+                    if (usuario.email === "yuri@zumbipalmeiras.com") {
+                        // Se for o Yuri, manda para a visão analítica geral
+                        window.location = "/dashboard/dashboard-admin.html";
+                    } else {
+                        // Se for qualquer outra pessoa, manda para a dashboard pessoal
+                        window.location = "/dashboard/dashboard-usuario.html"; 
+                    }
                 })
             } else {
                 resposta.text().then(function (texto) {

@@ -2,10 +2,10 @@
 function validarSessao() {
     var email = sessionStorage.EMAIL_USUARIO;
     var nome = sessionStorage.NOME_USUARIO;
-    var foto = sessionStorage.FOTO_USUARIO; // NOVO: Resgatando a foto!
+    var foto = sessionStorage.FOTO_USUARIO; 
 
     var b_usuario = document.getElementById("b_usuario");
-    var img_perfil = document.getElementById("img_perfil"); // NOVO: Elemento da foto no seu HTML do Dashboard
+    var img_perfil = document.getElementById("img_perfil"); 
 
     if (email != null && nome != null) {
         // Se estiver logado, preenche o nome
