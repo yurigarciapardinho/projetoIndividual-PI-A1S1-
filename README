@@ -1,0 +1,341 @@
+# Zumbi dos Palmeiras
+
+Projeto individual sobre o movimento Zumbi dos Palmeiras, com páginas institucionais, cadastro/login, uma dashboard administrativa para acompanhar dados de representatividade, adesão e perfil dos membros e uma (futura) dashboard pessoal para cada usuário com uma aba para seu perfil de usuário.
+
+## Escopo atual
+
+Esta documentação considera apenas as telas, rotas e fluxos ativos do projeto.
+
+Arquivos com `-api` no nome são arquivos legados do web-data-viz mantido como referência visual ou técnica e não entram no fluxo documentado aqui. Exemplos: `login-api.html`, `cadastro-api.html`, `dashboard-api.html`, `mural-api.html`, rotas `*-api.js`, controllers `*-api.js`, models `*-api.js` e CSS `*-api.css`.
+
+Também há arquivos herdados que não fazem parte das telas atuais, como `public/js/alerta.js`, usado pelo antigo fluxo de aquários.
+
+## Stack
+
+- Node.js com Express
+- MySQL via `mysql2`
+- HTML, CSS e JavaScript puro no front-end
+- Chart.js na dashboard administrativa
+- `dotenv` para configuração de ambiente
+
+## Como rodar
+
+1. Instale as dependências:
+
+```bash
+npm install
+```
+
+2. Configure o arquivo `.env.dev` com as variáveis usadas por `app.js` e `src/database/config.js`:
+
+```env
+APP_HOST=localhost
+APP_PORT=3333
+AMBIENTE_PROCESSO=desenvolvimento
+DB_HOST=localhost
+DB_DATABASE=zumbiPalmeiras
+DB_USER=seu_usuario
+DB_PASSWORD=sua_senha
+DB_PORT=3306
+```
+
+3. Crie e popule o banco com o script:
+
+```sql
+src/database/script-tabelas.sql
+```
+
+4. Inicie o servidor:
+
+```bash
+npm run dev
+```
+
+ou:
+
+```bash
+npm start
+```
+
+5. Acesse:
+
+```text
+http://localhost:3333
+```
+
+Use a porta definida em `APP_PORT`.
+
+## Estrutura viva do projeto
+
+```text
+app.js
+public/
+  index.html
+  historia.html
+  acesso.html
+  dashboard/dashboard-admin.html
+  css/
+    style.css
+    home.css
+    historia.css
+    acesso.css
+    dashboard-admin.css
+  js/
+    home.js
+    acesso.js
+    dashboard-admin.js
+    sessao.js
+src/
+  routes/
+    usuarios.js
+    dashboard.js
+    index.js
+  controllers/
+    usuarioController.js
+    dashboardController.js
+  models/
+    usuarioModel.js
+    dashboardModel.js
+  database/
+    config.js
+    script-tabelas.sql
+```
+
+## Telas atuais
+
+### Home
+
+Arquivo: `public/index.html`
+
+Caminhos: `/` e `/index.html`
+
+A home apresenta o movimento, com navegação principal, chamada "Conheça o movimento", seção "Nossa Identidade" e formulário de newsletter.
+
+Fluxos da tela:
+
+- O botão "Conheça o movimento" leva para `historia.html`.
+- O link "História" também leva para `historia.html`.
+- O formulário de newsletter valida se o e-mail tem `@`, ponto e tamanho plausível.
+- A inscrição da newsletter é apenas visual no front-end: não grava no banco e não chama endpoint.
+- Após inscrição válida, a tela mostra uma mensagem de confirmação temporária.
+
+Observação: os botões "Ler Manifesto", "Ver Galeria" e os links "Manifesto" e "Lutas" da home ainda não possuem páginas próprias no fluxo atual.
+
+### História
+
+Arquivo: `public/historia.html`
+
+Caminho: `/historia.html`
+
+Página institucional que conta a origem e o sentido do Zumbi dos Palmeiras. Ela organiza a narrativa em abertura, pergunta central, origem, linha do tempo, memória negra, importância e chamada final.
+
+Fluxos da tela:
+
+- O logo volta para `index.html`.
+- O botão "Faça Parte" leva para `acesso.html`.
+- O botão "Entender a origem" navega para a seção `#origemHistoria`.
+- O botão "Por que importa?" navega para a seção `#importanciaHistoria`.
+- O botão "Fortalecer o movimento" leva para `acesso.html`.
+
+Observação: no menu desta página existem links para `manifesto.html` e `lutas.html`, mas esses arquivos não existem no projeto atual.
+
+### Acesso
+
+Arquivo: `public/acesso.html`
+
+Caminho: `/acesso.html`
+
+Tela única para login e cadastro. O JavaScript alterna entre os dois cards sem recarregar a página.
+
+Fluxo de login:
+
+- Campos: e-mail e senha.
+- Valida e-mail e senha preenchida no front-end.
+- Envia `POST /usuarios/autenticar`.
+- Quando o login é aceito, salva os dados do usuário em `sessionStorage`.
+- Se o e-mail for `yuri@zumbipalmeiras.com`, redireciona para `/dashboard/dashboard-admin.html`.
+- Para qualquer outro e-mail, tenta redirecionar para `/dashboard/dashboard-usuario.html`.
+
+Pendência conhecida: `dashboard-usuario.html` ainda não existe no projeto atual. Portanto, login com usuário comum autentica, mas redireciona para uma página ausente.
+
+Fluxo de cadastro:
+
+- Campos obrigatórios: nome completo, e-mail, data de nascimento, etnia, bairro, senha e confirmação de senha.
+- Campos opcionais: link da foto e código de indicação.
+- A data é digitada como `DD/MM/AAAA` e convertida para `AAAA-MM-DD` antes de enviar ao back-end.
+- Valida e-mail, data, etnia, bairro, senha mínima de 6 caracteres, confirmação igual e pelo menos 3 letras na senha.
+- Envia `POST /usuarios/cadastrar`.
+- Em caso de sucesso, mostra alerta e volta para o card de login.
+- Em caso de e-mail duplicado ou código de indicação inválido, o back-end devolve mensagem específica.
+
+### Dashboard Admin
+
+Arquivo: `public/dashboard/dashboard-admin.html`
+
+Caminho: `/dashboard/dashboard-admin.html`
+
+Dashboard analítica restrita ao usuário administrador. A tela usa Chart.js e busca os dados consolidados no back-end.
+
+Proteção atual:
+
+- A validação acontece no front-end, em `public/js/dashboard-admin.js`.
+- A tela só carrega os dados se `sessionStorage.EMAIL_USUARIO` for `yuri@zumbipalmeiras.com`.
+- Se não houver usuário logado ou o e-mail for diferente, redireciona para `../acesso.html`.
+
+KPIs exibidos:
+
+- Vozes na Bancada: total de membros cadastrados.
+- Vozes de Hoje: cadastros realizados no dia.
+- Representatividade: percentual de respostas afirmativas da pergunta de representatividade.
+- Força Recente: etnia com mais adesões nos últimos 7 dias.
+
+Gráficos exibidos:
+
+- A Nossa Face: distribuição étnica geral da comunidade.
+- Consciência vs. Vivência: taxa de afirmação/acerto por categoria de pergunta.
+- Gerações da Bancada: distribuição dos membros por faixa geracional.
+- A Marcha do Movimento: evolução de cadastros ao longo do tempo.
+
+Fluxos da tela:
+
+- Ao carregar, chama `GET /dashboard/dados-admin`.
+- O link "Retornar" volta para `../index.html`.
+- O link "Sair" executa `limparSessao()`, limpa o `sessionStorage` e volta para `../index.html`.
+
+## Rotas do back-end
+
+### Usuários
+
+Arquivo: `src/routes/usuarios.js`
+
+| Método | Rota | Controller | Finalidade |
+| --- | --- | --- | --- |
+| `POST` | `/usuarios/cadastrar` | `usuarioController.cadastrar` | Cadastra um membro na tabela `usuario`. |
+| `POST` | `/usuarios/autenticar` | `usuarioController.autenticar` | Autentica por e-mail e senha. |
+
+### Dashboard
+
+Arquivo: `src/routes/dashboard.js`
+
+| Método | Rota | Controller | Finalidade |
+| --- | --- | --- | --- |
+| `GET` | `/dashboard/dados-admin` | `dashboardController.buscarDadosAdmin` | Retorna KPIs e séries usadas na dashboard admin. |
+
+### Arquivos estáticos
+
+O `app.js` serve a pasta `public` com `express.static`, então as páginas HTML são acessadas diretamente pelo navegador.
+
+## Banco de dados
+
+Script: `src/database/script-tabelas.sql`
+
+Banco: `zumbiPalmeiras`
+
+Tabelas atuais:
+
+- `usuario`: dados de cadastro dos membros, foto opcional, data de criação e indicação por outro usuário.
+- `pergunta`: perguntas usadas para análise de sentimento, identidade e história.
+- `resposta`: respostas dos usuários para as perguntas.
+
+O script também insere dados iniciais para testes, incluindo o usuário administrador:
+
+```text
+email: yuri@zumbipalmeiras.com
+senha: Amarelo,18
+```
+
+## Fluxos principais
+
+### Fluxo institucional
+
+```text
+Home (/)
+  -> História (/historia.html)
+  -> Acesso (/acesso.html)
+```
+
+O visitante conhece o movimento, lê a história e pode entrar no fluxo de cadastro/login.
+
+### Fluxo de newsletter
+
+```text
+Home
+  -> informa e-mail
+  -> validação local
+  -> mensagem visual de inscrição
+```
+
+Este fluxo não persiste dados no banco.
+
+### Fluxo de cadastro
+
+```text
+Acesso
+  -> Cadastre-se
+  -> validação local
+  -> POST /usuarios/cadastrar
+  -> INSERT em usuario
+  -> volta para Login
+```
+
+O campo `fkIndicador` permite registrar quem convidou o novo membro. Se o ID informado não existir, o cadastro é rejeitado.
+
+### Fluxo de login admin
+
+```text
+Acesso
+  -> Login
+  -> POST /usuarios/autenticar
+  -> sessionStorage
+  -> /dashboard/dashboard-admin.html
+  -> GET /dashboard/dados-admin
+```
+
+O admin enxerga os dados consolidados da comunidade.
+
+### Fluxo de login de usuário comum
+
+```text
+Acesso
+  -> Login
+  -> POST /usuarios/autenticar
+  -> sessionStorage
+  -> /dashboard/dashboard-usuario.html
+```
+
+Este fluxo está parcialmente implementado: o redirecionamento existe em `public/js/acesso.js`, mas a tela `dashboard-usuario.html` ainda não existe.
+
+## Relação entre front-end, rotas, controllers e models
+
+O fluxo de uma funcionalidade segue esta ordem:
+
+```text
+Front-end
+  -> fetch("/rota")
+  -> routes/*.js
+  -> controllers/*.js
+  -> models/*.js
+  -> database/config.js
+  -> MySQL
+```
+
+Exemplo da dashboard:
+
+```text
+public/js/dashboard-admin.js
+  -> GET /dashboard/dados-admin
+  -> src/routes/dashboard.js
+  -> src/controllers/dashboardController.js
+  -> src/models/dashboardModel.js
+  -> tabelas usuario, pergunta e resposta
+```
+
+Se o nome de uma função mudar em controller ou model, a chamada correspondente em rota ou front-end também precisa ser atualizada para evitar erro de rota, função inexistente ou resposta vazia.
+
+## Pendências conhecidas
+
+- Criar a dashboard para usuário comum e perpetuar o  redirecionamento para `/dashboard/dashboard-usuario.html`.
+- Criar páginas reais para `manifesto.html` e `lutas.html` ou ajustar os links do menu.
+- Decidir se os botões "Ler Manifesto" e "Ver Galeria" da home terão destino.
+- Persistir newsletter no banco ou deixar explícito que é apenas demonstrativo.
+- Mover a regra de permissão do admin também para o back-end.
