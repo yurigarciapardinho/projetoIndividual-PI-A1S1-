@@ -46,3 +46,11 @@ function buscarDadosAdmin(req, res) {
 module.exports = {
     buscarDadosAdmin
 };
+
+//200 OK: Sucesso na requisição.
+// 201 Created: Recurso criado com sucesso (usado após um POST).
+// 400 Bad Request: Erro do cliente (ex: parâmetros faltando).
+// 401 Unauthorized: Falta de autenticação.
+// 403 Forbidden: O usuário não tem permissão para acessar o recurso.
+// 404 Not Found: Recurso ou página não encontrada.
+// 500 Internal Server Error: Erro inesperado no servidor.
