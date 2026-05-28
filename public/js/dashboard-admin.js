@@ -105,7 +105,13 @@ function plotarGrafico(resposta, idGrafico) {
                 labels: labelsConhecimento,
                 datasets: [{ label: '% de Acerto', data: valoresConhecimento, backgroundColor: '#0a3b1a', borderRadius: 8 }]
             },
-            options: { indexAxis: 'y', scales: { x: { max: 100 } } }
+            options: { 
+                indexAxis: 'y', 
+                scales: { 
+                    x: { max: 100, grid: { display: false } },
+                    y: { grid: { display: false } }
+                } 
+            }
         };
 
         let coresSocio = labelsSocio.map(label => {
@@ -118,7 +124,13 @@ function plotarGrafico(resposta, idGrafico) {
                 labels: labelsSocio,
                 datasets: [{ label: 'Índice Mapeado (%)', data: valoresSocio, backgroundColor: coresSocio, borderRadius: 8 }]
             },
-            options: { indexAxis: 'y', scales: { x: { max: 100 } } }
+            options: { 
+                indexAxis: 'y', 
+                scales: { 
+                    x: { max: 100, grid: { display: false } },
+                    y: { grid: { display: false } }
+                } 
+            }
         };
 
         let myChartConhecimento = new Chart(document.getElementById('canvasCategoriasConhecimento'), configConhecimento);
@@ -145,10 +157,18 @@ function plotarGrafico(resposta, idGrafico) {
         config = { type: 'doughnut', data: { labels: labels, datasets: [{ data: valores, backgroundColor: ['#d4af37', '#8b5a2b', '#0a3b1a', '#cd853f', '#000000'] }] } };
         canvasId = "canvasEtnia";
     } else if (idGrafico == 'geracoes') {
-        config = { type: 'bar', data: { labels: labels, datasets: [{ label: 'Membros', data: valores, backgroundColor: '#d4af37' }] } };
+        config = { 
+            type: 'bar', 
+            data: { labels: labels, datasets: [{ label: 'Membros', data: valores, backgroundColor: '#d4af37' }] },
+            options: { scales: { x: { grid: { display: false } }, y: { grid: { display: false } } } }
+        };
         canvasId = "canvasGeracoes";
     } else if (idGrafico == 'crescimento') {
-        config = { type: 'line', data: { labels: labels, datasets: [{ label: 'Total Acumulado', data: valores, borderColor: '#0a3b1a', fill: true }] } };
+        config = { 
+            type: 'line', 
+            data: { labels: labels, datasets: [{ label: 'Total Acumulado', data: valores, borderColor: '#0a3b1a', fill: true, pointRadius: 0, tension: 0.4 }] },
+            options: { scales: { x: { grid: { display: false } }, y: { grid: { display: false } } } }
+        };
         canvasId = "canvasCrescimento";
     }
 

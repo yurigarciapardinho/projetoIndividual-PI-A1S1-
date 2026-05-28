@@ -69,9 +69,9 @@ function buscarGeracoes() {
 
 function buscarCrescimento() {
     var instrucaoSql = `
-        SELECT DATE_FORMAT(dtCriacao, '%Y-%m-%d') as dataCadastro, COUNT(*) as quantidade 
+        SELECT DATE_FORMAT(dtCriacao, '%Y-%m') as dataCadastro, COUNT(*) as quantidade 
         FROM usuario 
-        GROUP BY DATE_FORMAT(dtCriacao, '%Y-%m-%d') 
+        GROUP BY DATE_FORMAT(dtCriacao, '%Y-%m') 
         ORDER BY dataCadastro
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
