@@ -58,9 +58,8 @@ CREATE TABLE pergunta (
     CONSTRAINT fk_pergunta_questionario FOREIGN KEY (fkQuestionario) REFERENCES questionario(idQuestionario)
 );
 
--- ==============================================
 -- TABELA ASSOCIATIVA (RESPOSTAS)
--- ==============================================
+
 CREATE TABLE resposta (
     fkUsuario INT,
     fkPergunta INT,

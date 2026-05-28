@@ -1,9 +1,10 @@
 function carregarDadosAdmin() {
+    
 
     const emailLogado = sessionStorage.EMAIL_USUARIO;
 
-    if (emailLogado !== "yuri@zumbipalmeiras.com") {
-        alert("Acesso Negado: Você não tem permissão para acessar a inteligência da bancada.");
+    if (emailLogado != "yuri@zumbipalmeiras.com") {
+        alert("Acesso Negado: Você não tem permissão para acessar a dash do ZDP");
         window.location = "../acesso.html"; 
         return false; 
     }
@@ -154,7 +155,7 @@ function plotarGrafico(resposta, idGrafico) {
     }
 
     if (idGrafico == 'etnia') {
-        config = { type: 'doughnut', data: { labels: labels, datasets: [{ data: valores, backgroundColor: ['#d4af37', '#8b5a2b', '#0a3b1a', '#cd853f', '#000000'] }] } };
+        config = { type: 'doughnut', data: { labels: labels, datasets: [{ data: valores, backgroundColor: ['#d4af37', '#ebe8e5', '#0a3b1a', '#cd853f', '#000000'] }] } };
         canvasId = "canvasEtnia";
     } else if (idGrafico == 'geracoes') {
         config = { 

@@ -292,7 +292,7 @@ function logar() {
                     sessionStorage.USUARIO = JSON.stringify(usuario)
 
                     if (usuario.email === "yuri@zumbipalmeiras.com") {
-                        // Se for o Yuri, manda para a visão analítica geral
+                        // Se for o Yuri(maioral), manda pra dash admin
                         window.location = "/dashboard/dashboard-admin.html";
                     } else {
                         // Se for qualquer outra pessoa, manda para a pesquisa
