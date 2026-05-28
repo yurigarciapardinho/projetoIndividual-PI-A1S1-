@@ -48,7 +48,7 @@ function preencherKpis(dados) {
 
     kpiTaxaAcertos.innerHTML = `${dados.taxaAcertos || 0}%`;
     if (dados.taxaAcertos < 60) {
-        msgTaxaAcertos.innerHTML = "Atenção: Revise o texto didático do site.";
+        msgTaxaAcertos.innerHTML = "Atenção: Revisar o texto didático do site.";
         kpiTaxaAcertos.style.color = "#a0522d";
     } else {
         msgTaxaAcertos.innerHTML = "O aprendizado está sendo efetivo.";
@@ -84,7 +84,6 @@ function plotarGrafico(resposta, idGrafico) {
     let canvasId = "";
     
     if (idGrafico == 'categorias') {
-        // Tratamento especial para separar categorias por TIPO
         let labelsConhecimento = [];
         let valoresConhecimento = [];
         let labelsSocio = [];
@@ -126,7 +125,7 @@ function plotarGrafico(resposta, idGrafico) {
         let myChartSocio = new Chart(document.getElementById('canvasCategoriasSocio'), configSocio);
 
         setTimeout(() => atualizarGraficoCategorias(myChartConhecimento, myChartSocio), 5000);
-        return; // Sai da função para não executar o código padrão abaixo
+        return; 
     }
 
     for (let i = 0; i < resposta.length; i++) {

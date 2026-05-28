@@ -20,7 +20,7 @@ function buscarCadastrosHoje() {
 }
 
 function buscarRepresentatividade() {
-    // Calcula a porcentagem de "Sim" (1) para a Pergunta 1 (Representatividade)
+    // Calcula a porcentagem de SIM (1) para a Pergunta 1  que é Representatividade 
     var instrucaoSql = `
         SELECT ROUND((SUM(valorResposta) / COUNT(valorResposta)) * 100, 0) AS representatividade 
         FROM resposta 

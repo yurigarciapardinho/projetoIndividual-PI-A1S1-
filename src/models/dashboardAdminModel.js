@@ -45,16 +45,23 @@ function buscarCategorias() {
 function buscarGeracoes() {
     var instrucaoSql = `
         SELECT 
-            CASE 
-                WHEN TIMESTAMPDIFF(YEAR, dataNascimento, CURDATE()) < 18 THEN 'Sementes (<18)'
-                WHEN TIMESTAMPDIFF(YEAR, dataNascimento, CURDATE()) BETWEEN 18 AND 30 THEN 'Juventude (18-30)'
-                WHEN TIMESTAMPDIFF(YEAR, dataNascimento, CURDATE()) BETWEEN 31 AND 50 THEN 'Resistência (31-50)'
-                ELSE 'Ancestralidade (>50)'
-            END as geracao,
-            COUNT(*) as quantidade
-        FROM usuario
-        WHERE dataNascimento IS NOT NULL
-        GROUP BY geracao
+    CASE 
+        WHEN TIMESTAMPDIFF(YEAR, dataNascimento, CURDATE()) < 18 THEN 'Sementes (<18)'
+        WHEN TIMESTAMPDIFF(YEAR, dataNascimento, CURDATE()) BETWEEN 18 AND 30 THEN 'Juventude (18-30)'
+        WHEN TIMESTAMPDIFF(YEAR, dataNascimento, CURDATE()) BETWEEN 31 AND 50 THEN 'Resistência (31-50)'
+        ELSE 'Ancestralidade (>50)'
+        END AS geracao,
+        COUNT(*) AS quantidade
+    FROM usuario
+    WHERE dataNascimento IS NOT NULL
+    GROUP BY geracao
+    ORDER BY 
+        CASE geracao
+            WHEN 'Sementes (<18)' THEN 1
+            WHEN 'Juventude (18-30)' THEN 2
+            WHEN 'Resistência (31-50)' THEN 3
+            ELSE 4
+        END;
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);

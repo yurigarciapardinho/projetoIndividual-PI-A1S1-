@@ -4,7 +4,7 @@ function buscarKpis(req, res) {
     dashboardAdminModel.buscarKpis()
         .then(function (resultado) {
             if (resultado.length > 0) {
-                res.status(200).json(resultado[0]); // Retorna o primeiro registro que tem tudo
+                res.status(200).json(resultado[0]);
             } else {
                 res.status(204).send("Nenhum dado encontrado!");
             }
