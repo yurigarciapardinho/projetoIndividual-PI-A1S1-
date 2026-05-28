@@ -51,7 +51,6 @@ function buscarResultados(req, res) {
         return;
     }
 
-    // Busca resultados do usuário e o consolidado geral
     Promise.all([
         quizModel.buscarResultadoUsuario(idUsuario),
         quizModel.buscarResultadoGeral()

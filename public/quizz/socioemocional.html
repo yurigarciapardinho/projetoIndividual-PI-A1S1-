@@ -17,7 +17,7 @@
             <a href="../index.html" class="linkNavegacao">Início</a>
             <a href="../historia.html" class="linkNavegacao">História</a>
         </nav>
-        <button class="botaoDestaque" onclick="window.location='../index.html'">SAIR</button> 
+        <button class="botaoDestaque"  onclick="limparSessao()">SAIR</button> 
     </header>
 
     <main class="containerQuiz">
@@ -238,41 +238,55 @@
         btnResultados.style.display = "block";
     }
 
-    function verResultados() {
+        function verResultados() {
         divAreaGraficos.style.display = "flex";
         
         let idUsuario = sessionStorage.ID_USUARIO;
         fetch(`/quiz/resultados/${idUsuario}`).then(response => response.json()).then(data => {
+            
             let certasUsuario = 0;
             let totalConhecimentoUsuario = 0;
-            for(let i=0; i<data.usuario.length; i++) {
-                if(data.usuario[i].tipo == 'Conhecimento') {
+            
+            for (let i = 0; i < data.usuario.length; i++) {
+                if (data.usuario[i].tipo == 'Conhecimento') {
                     totalConhecimentoUsuario++;
-                    if(data.usuario[i].valorResposta == data.usuario[i].gabarito) certasUsuario++;
+                    if (data.usuario[i].valorResposta == data.usuario[i].gabarito) {
+                        certasUsuario++;
+                    }
                 }
             }
-            let pctAcertoUser = (certasUsuario / totalConhecimentoUsuario) * 100 || 0;
+            let pctAcertoUser = totalConhecimentoUsuario > 0 ? (certasUsuario / totalConhecimentoUsuario) * 100 : 0;
 
             let certasGeral = 0;
             let totalGeral = 0;
-            for(let i=0; i<data.geral.length; i++) {
-                if(data.geral[i].tipo == 'Conhecimento') {
-                    let acertosAqui = data.geral[i].gabarito == 1 ? data.geral[i].qtdSim : (data.geral[i].totalRespostas - data.geral[i].qtdSim);
+            
+            for (let i = 0; i < data.geral.length; i++) {
+                if (data.geral[i].tipo == 'Conhecimento') {
+                    // Descobre se a resposta certa no banco era SIM (1) ou NÃO (0)
+                    let gabarito = data.geral[i].gabarito; 
+                    
+                    // Se o gabarito for 1, somamos quem respondeu SIM (qtdSim)
+                    // Se o gabarito for 0, somamos quem respondeu NÃO (total - qtdSim)
+                    let acertosAqui = gabarito == 1 ? Number(data.geral[i].qtdSim) : (Number(data.geral[i].totalRespostas) - Number(data.geral[i].qtdSim));
+                    
                     certasGeral += acertosAqui;
-                    totalGeral += data.geral[i].totalRespostas;
+                    totalGeral += Number(data.geral[i].totalRespostas);
                 }
             }
-            let pctAcertoGeral = (certasGeral / totalGeral) * 100 || 0;
+            let pctAcertoGeral = totalGeral > 0 ? (certasGeral / totalGeral) * 100 : pctAcertoUser;
 
             new Chart(document.getElementById('graficoAcertos'), {
                 type: 'bar',
                 data: {
-                    labels: ['Seus Acertos', 'Acertos da Torcida'],
+                    labels: ['Média dos seus Acertos', 'Média acertos da Torcida'],
                     datasets: [{
                         label: '% de Acerto no Quiz',
                         data: [pctAcertoUser, pctAcertoGeral],
                         backgroundColor: ['#d4af37', '#0a3b1a']
                     }]
+                },
+                options: {
+                    scales: { y: { max: 100, min: 0 } }
                 }
             });
 
@@ -280,17 +294,17 @@
             let dataUserSocio = [];
             let dataGeralSocio = [];
 
-            for(let i=0; i<data.geral.length; i++) {
-                if(data.geral[i].tipo == 'Socioemocional') {
+            for (let i = 0; i < data.geral.length; i++) {
+                if (data.geral[i].tipo == 'Socioemocional') {
                     labelsSocio.push(data.geral[i].categoria);
                     
-                    let pctGeral = (data.geral[i].qtdSim / data.geral[i].totalRespostas) * 100 || 0;
+                    let pctGeral = (Number(data.geral[i].qtdSim) / Number(data.geral[i].totalRespostas)) * 100 || 0;
                     dataGeralSocio.push(pctGeral);
                     
                     let pctUser = 0;
-                    let userResp = data.usuario.find(u => u.categoria == data.geral[i].categoria);
+                    let userResp = data.usuario.find(u => u.categoria == data.geral[i].categoria && u.tipo == 'Socioemocional');
                     if (userResp) {
-                        pctUser = userResp.valorResposta * 100; 
+                        pctUser = Number(userResp.valorResposta) * 100;
                     }
                     dataUserSocio.push(pctUser);
                 }
@@ -314,9 +328,10 @@
                     ]
                 },
                 options: {
-                    scales: { y: { max: 100 } }
+                    scales: { y: { max: 100, min: 0 } }
                 }
             });
         });
     }
+
 </script>
