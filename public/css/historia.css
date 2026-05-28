@@ -7,6 +7,9 @@
     padding: 90px 5%;
     background-color: #07130d;
     border-bottom: 1px solid #1a8e4a;
+    background-image: url('../assets/imgs/BANNERzdpBranco.png');
+    background-size: cover;
+    background-position: center;
 }
 
 .etiquetaHistoria {
@@ -64,6 +67,21 @@
 .botaoSecundarioHistoria:hover {
     background-color: #d4af37;
     color: #000000;
+}
+
+.caixaHero {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 30px;
+    background: rgba(5, 14, 10, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 65%;
 }
 
 .secaoPerguntaHistoria {
