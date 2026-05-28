@@ -48,9 +48,9 @@
             </div>
 
             <div class="cartaoKpi cardOuro">
-                <h3>Força Recente</h3>
-                <h1 id="kpiEtniaRecente" style="font-size: 28px;">--</h1>
-                <p id="msgEtniaRecente" class="textoReflexivo">Etnia com mais adesão recente<small>7 dias</small></p>
+                <h3>Efetividade do Ensino</h3>
+                <h1 id="kpiTaxaAcertos" style="font-size: 28px;">--%</h1>
+                <p id="msgTaxaAcertos" class="textoReflexivo">Taxa de Acertos no Quiz Didático</p>
             </div>
 
         </section>
@@ -66,10 +66,18 @@
             </div>
             
             <div class="cartaoGrafico">
-                <h3>Consciência vs. Vivência</h3>
-                <p class="descricaoGrafico">Índice de acerto e sentimento por categoria</p>
+                <h3>Resultados do Ensino (Quiz)</h3>
+                <p class="descricaoGrafico">Taxa de Acertos por Tema Histórico</p>
                 <div class="areaCanvas">
-                    <canvas id="canvasCategorias"></canvas>
+                    <canvas id="canvasCategoriasConhecimento"></canvas>
+                </div>
+            </div>
+
+            <div class="cartaoGrafico">
+                <h3>Sentimento (Socioemocional)</h3>
+                <p class="descricaoGrafico">Índice de Afirmação nas Vivências</p>
+                <div class="areaCanvas">
+                    <canvas id="canvasCategoriasSocio"></canvas>
                 </div>
             </div>
 

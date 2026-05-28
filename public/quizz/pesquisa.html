@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zumbi Palmeiras - Quiz Didático</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/quizz.css">
+    <script src="../js/sessao.js"></script>
+</head>
+
+<body onload="iniciarPagina()">
+    <header class="cabecalhoPrincipal">
+        <div class="logoSite">ZUMBI DOS PALMEIRAS</div>
+        <nav class="navegacaoPrincipal">
+            <a href="../index.html" class="linkNavegacao">Início</a>
+            <a href="../historia.html" class="linkNavegacao">História</a>
+        </nav>
+        <button class="botaoDestaque" onclick="window.location='../index.html'">SAIR</button> 
+    </header>
+
+    <main class="containerQuiz">
+        <h2 class="tituloSecaoQuiz">Quiz Didático</h2>
+
+        <div id="divMenuInicial">
+            <button id="btnIniciarQuiz" class="botaoDestaqueSecundario" onclick="iniciarQuiz()">INICIAR O QUIZ</button>
+        </div>
+
+        <div id="divPontuacao" class="placarQuiz" style="display: none;">
+            <div id="divPlacar" class="colunaPlacar">
+                <span class="linhaPlacar">Acertos: <span id="spanCertas" class="valorPlacar">0</span></span>
+                <span class="linhaPlacar">Erros: <span id="spanErradas" class="valorPlacar">0</span></span>
+            </div>
+            <div id="divFinal" class="fimPlacar" style="display: none;">
+                <span class="tituloFimPlacar">Fim do Quiz</span>
+                <span id="msgFinal" class="linhaPlacar">***</span>
+            </div>
+        </div>
+
+        <div id="divJogo" class="secaoJogoQuiz" style="display: none;">
+            <div class="blocoPerguntaQuiz">
+                <span>Pergunta atual: <span id="spanNumeroDaQuestaoAtual" class="textoDestaqueQuiz"></span> de <span id="qtdQuestoes" class="textoDestaqueQuiz"></span> perguntas.</span>
+            </div>
+
+            <div class="blocoPerguntaQuiz">
+                <span id="spanQuestaoExibida" class="textoDestaqueQuiz"></span>
+            </div>
+
+            <div class="blocoPerguntaQuiz">
+                <span><em>Escolha uma opção:</em></span>
+                <div class="grupoOpcoesQuiz">
+                    <span class="opcaoResposta">
+                        <input type="radio" id="opcaoSim" name="option" value="1" />
+                        <label for="opcaoSim">Sim</label>
+                    </span>
+                    <span class="opcaoResposta">
+                        <input type="radio" id="opcaoNao" name="option" value="0" />
+                        <label for="opcaoNao">Não</label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="grupoBotoesQuiz">
+                <button onclick="submeter()" id="btnSubmeter" class="botaoQuiz">Submeter resposta</button>
+                <button onclick="avancar()" id="btnProx" class="botaoQuiz" disabled>Avançar para próxima</button>
+                <button onclick="tentarNovamente()" id="btnTentarNovamente" class="botaoQuiz" disabled>Refazer Quiz</button>
+                <button onclick="enviarParaBanco()" id="btnEnviarBanco" class="botaoQuiz" style="display: none;">Enviar Respostas Finais</button>
+                <button onclick="window.location='socioemocional.html'" id="btnSocio" class="botaoDestaqueSecundario" style="display: none;">Ir para Questionário Socioemocional</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="rodapePrincipal">
+        <p class="textoRodape">2026 Zumbi dos Palmeiras. Site independente e autogestionado.</p>
+    </footer>
+</body>
+</html>
+<script>
+    let listaDeQuestoes = [];
+    let respostasUsuario = [];
+    
+    let numeroDaQuestaoAtual = 0;
+    let quantidadeDeQuestoes = 0;
+    let certas = 0;
+    let erradas = 0;
+
+    function iniciarPagina() {
+        divPontuacao.style.display = "none";
+        divJogo.style.display = "none";
+        
+        if (sessionStorage.ID_USUARIO == undefined) {
+            alert("Você precisa estar logado para responder!");
+            window.location = "../acesso.html";
+            return;
+        }
+
+        let idUsuario = sessionStorage.ID_USUARIO;
+        fetch(`/quiz/resultados/${idUsuario}`).then(response => response.json()).then(data => {
+            let temDidatico = data.usuario.some(r => r.tipo === 'Conhecimento');
+            if (temDidatico) {
+                // Já tem resposta enviada no banco. Não pode refazer o quiz, vai pro próximo
+                window.location = "socioemocional.html";
+            }
+        });
+    }
+
+    function iniciarQuiz() {
+        fetch("/quiz/perguntas/Conhecimento", { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (resposta) {
+                    listaDeQuestoes = resposta;
+                    quantidadeDeQuestoes = listaDeQuestoes.length;
+
+                    divPontuacao.style.display = "flex";
+                    divJogo.style.display = "flex";
+                    divMenuInicial.style.display = "none";
+                    qtdQuestoes.innerHTML = quantidadeDeQuestoes;
+
+                    preencherHTMLcomQuestaoAtual(0);
+
+                    btnSubmeter.disabled = false;
+                    btnProx.disabled = true;
+                    btnTentarNovamente.disabled = false;
+                });
+            } else {
+                alert("Erro ao buscar as perguntas.");
+            }
+        });
+    }
+
+    function preencherHTMLcomQuestaoAtual(index) {
+        habilitarAlternativas(true);
+        const questaoAtual = listaDeQuestoes[index];
+        numeroDaQuestaoAtual = index;
+        
+        spanNumeroDaQuestaoAtual.innerHTML = Number(index) + 1; 
+        spanQuestaoExibida.innerHTML = questaoAtual.descricao;
+    }
+
+    function submeter() {
+        const opcoes = document.getElementsByName("option"); 
+
+        let temMarcado = false;
+        let valorSelecionado = null;
+
+        for (let i = 0; i < opcoes.length; i++) {
+            if (opcoes[i].checked) {
+                temMarcado = true;
+                valorSelecionado = opcoes[i].value;
+                break;
+            }
+        }
+
+        if (!temMarcado) {
+            alert("Não há opções escolhidas. Escolha Sim ou Não.");
+            return false;
+        }
+
+        btnSubmeter.disabled = true;
+        btnProx.disabled = false;
+        habilitarAlternativas(false);
+
+        let questao = listaDeQuestoes[numeroDaQuestaoAtual];
+        if (valorSelecionado == questao.gabarito) {
+            certas++;
+            spanCertas.innerHTML = certas;
+            alert("Resposta Certa!");
+        } else {
+            erradas++;
+            spanErradas.innerHTML = erradas;
+            alert("Resposta Errada!");
+        }
+
+        respostasUsuario.push({
+            idPergunta: questao.idPergunta,
+            valorResposta: valorSelecionado
+        });
+    }
+    
+    function habilitarAlternativas(habilitar) {
+        let desabilitar = !habilitar;
+        opcaoSim.disabled = desabilitar;
+        opcaoNao.disabled = desabilitar;
+    }
+
+    function avancar() {
+        btnProx.disabled = true;
+        btnSubmeter.disabled = false;
+
+        desmarcarRadioButtons();
+
+        if (numeroDaQuestaoAtual < quantidadeDeQuestoes - 1) {
+            preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual + 1);
+        } else {
+            finalizarJogo();
+        }
+    }
+
+    function tentarNovamente() {
+        numeroDaQuestaoAtual = 0;
+        certas = 0;
+        erradas = 0;
+        respostasUsuario = [];
+        
+        spanCertas.innerHTML = certas;
+        spanErradas.innerHTML = erradas;
+        msgFinal.innerHTML = "***";
+        msgFinal.classList.remove("mensagemSucessoQuiz");
+        divJogo.classList.remove("quizInativo"); 
+        
+        btnEnviarBanco.style.display = "none";
+        btnSocio.style.display = "none";
+        divFinal.style.display = "none";
+        
+        desmarcarRadioButtons();
+        preencherHTMLcomQuestaoAtual(0);
+        
+        btnProx.disabled = true;
+        btnSubmeter.disabled = false;
+    }
+
+    function desmarcarRadioButtons() {
+        const opcoes = document.getElementsByName("option");
+        for (let i = 0; i < opcoes.length; i++) {
+            opcoes[i].checked = false;
+        }
+    }
+
+    function finalizarJogo() {
+        let percentual = (certas / quantidadeDeQuestoes) * 100;
+        let textoParaMensagemFinal = `Você acertou ${percentual.toFixed(2)}% do Quiz Didático.`;
+        
+        msgFinal.innerHTML = textoParaMensagemFinal;
+        msgFinal.classList.add("mensagemSucessoQuiz"); 
+        divJogo.classList.add("quizInativo"); 
+        divFinal.style.display = "flex";
+
+        btnProx.disabled = true;
+        btnSubmeter.disabled = true;
+        btnEnviarBanco.style.display = "block";
+    }
+
+    function enviarParaBanco() {
+        btnEnviarBanco.disabled = true;
+        btnTentarNovamente.disabled = true;
+        
+        let idUsuario = sessionStorage.ID_USUARIO;
+        
+        for (let i = 0; i < respostasUsuario.length; i++) {
+            let resp = respostasUsuario[i];
+            
+            fetch("/quiz/responder", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    idUsuarioServer: idUsuario,
+                    idPerguntaServer: resp.idPergunta,
+                    valorRespostaServer: resp.valorResposta
+                })
+            }).then(function (resposta) {
+                if (resposta.ok) {
+                    console.log("Resposta enviada com sucesso");
+                }
+            });
+        }
+        
+        alert("Respostas finais gravadas com sucesso!");
+        btnEnviarBanco.style.display = "none";
+        btnSocio.style.display = "block";
+    }
+</script>

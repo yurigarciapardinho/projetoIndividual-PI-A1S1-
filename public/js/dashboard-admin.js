@@ -1,190 +1,198 @@
 function carregarDadosAdmin() {
 
-    // =========================================================
-    // 1.(O Segurança) VERIFICA SE O USUÁRIO LOGADO É O ADMIN (YURI)eu
-    // =========================================================
     const emailLogado = sessionStorage.EMAIL_USUARIO;
 
-    // Se não houver ninguém logado ou se o e-mail não for o do Admin
     if (emailLogado !== "yuri@zumbipalmeiras.com") {
         alert("Acesso Negado: Você não tem permissão para acessar a inteligência da bancada.");
-        window.location = "../acesso.html"; // Expulsa para o login
-        return false; // Interrompe a execução da função para evitar que os dados sejam carregados
+        window.location = "../acesso.html"; 
+        return false; 
     }
 
-    // =========================================================
-    // 2. BUSCA DE DADOS (Se passou pelo segurança)
-    // =========================================================
-    fetch("/dashboard/dados-admin")
-        .then(function (resposta) {
-            if (resposta.ok) {
-                resposta.json().then(function (dados) {
-                    console.log("Dados recebidos do banco: ", JSON.stringify(dados));
-                    
-                    preencherKpis(dados);
+    obterDadosKpis();
+    
+    obterDadosGrafico('etnia');
+    obterDadosGrafico('categorias');
+    obterDadosGrafico('geracoes');
+    obterDadosGrafico('crescimento');
+}
 
-                    plotarGraficoEtnia(dados.etnias);
-                    plotarGraficoCategorias(dados.categorias);
-                    plotarGraficoGeracoes(dados.geracoes);
-                    plotarGraficoCrescimento(dados.crescimento);
-                });
-            } else {
-                console.error('Erro na obtenção dos dados da API');
-                resposta.text().then(texto => {
-                    console.error("Detalhes do erro: ", texto);
-                });
-            }
-        })
-        .catch(function (erro) {
-            console.error(`Erro no Fetch: ${erro.message}`);
-        });
+function obterDadosKpis() {
+    fetch("/dashboard-admin/kpis", { cache: 'no-store' }).then(function (response) {
+        if (response.ok) {
+            response.json().then(function (dados) {
+                preencherKpis(dados);
+                setTimeout(() => atualizarDadosKpis(), 5000);
+            });
+        }
+    });
 }
 
 function preencherKpis(dados) {
-    // Total de Membros
     kpiTotalMembros.innerHTML = dados.totalMembros;
-
-    // Cadastros de Hoje
     kpiCadastrosHoje.innerHTML = `+${dados.cadastrosHoje}`;
+    
     if (dados.cadastrosHoje > 0) {
         msgCadastrosHoje.innerHTML = "O movimento está ganhando novas vozes hoje!";
     } else {
         msgCadastrosHoje.innerHTML = "Aguardando novas adesões hoje.";
     }
 
-    // Índice de Representatividade
-    kpiIndiceRepresentatividade.innerHTML = `${dados.indiceRepresentatividade}%`;
-    
+    kpiIndiceRepresentatividade.innerHTML = `${dados.indiceRepresentatividade || 0}%`;
     if (dados.indiceRepresentatividade < 50) {
         msgRepresentatividade.innerHTML = "Alerta: A torcida não se vê no clube. Precisamos agir.";
         kpiIndiceRepresentatividade.style.color = "#a0522d";
     } else {
-        msgRepresentatividade.innerHTML = "A percepção de representatividade está melhorando.";
+        msgRepresentatividade.innerHTML = "A percepção de representatividade está forte.";
         kpiIndiceRepresentatividade.style.color = "#0a3b1a"; 
     }
 
-    kpiEtniaRecente.innerHTML = dados.etniaRecente;
+    kpiTaxaAcertos.innerHTML = `${dados.taxaAcertos || 0}%`;
+    if (dados.taxaAcertos < 60) {
+        msgTaxaAcertos.innerHTML = "Atenção: Revise o texto didático do site.";
+        kpiTaxaAcertos.style.color = "#a0522d";
+    } else {
+        msgTaxaAcertos.innerHTML = "O aprendizado está sendo efetivo.";
+        kpiTaxaAcertos.style.color = "#0a3b1a";
+    }
 }
 
-
-function plotarGraficoEtnia(dados) {
-    const labels = [];
-    const valores = [];
-
-    for (let i = 0; i < dados.length; i++) {
-        labels.push(dados[i].etnia);
-        valores.push(dados[i].quantidade);
-    }
-
-    new Chart(canvasEtnia, {
-        type: 'doughnut',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: valores,
-                backgroundColor: ['#d4af37', '#8b5a2b', '#0a3b1a', '#cd853f', '#000000'],
-                borderWidth: 0 
-            }]
-        },
-        options: {
-            cutout: '75%', // Rosca fina e elegante KKKKKKKK
-            plugins: { legend: { position: 'bottom' } }
+function atualizarDadosKpis() {
+    fetch("/dashboard-admin/kpis", { cache: 'no-store' }).then(function (response) {
+        if (response.ok) {
+            response.json().then(function (dados) {
+                preencherKpis(dados);
+                setTimeout(() => atualizarDadosKpis(), 5000);
+            });
         }
     });
 }
 
-function plotarGraficoCategorias(dados) {
-    const labels = [];
-    const valores = [];
+function obterDadosGrafico(idGrafico) {
+    fetch(`/dashboard-admin/${idGrafico}`, { cache: 'no-store' }).then(function (response) {
+        if (response.ok) {
+            response.json().then(function (resposta) {
+                plotarGrafico(resposta, idGrafico);
+            });
+        }
+    });
+}
 
-    for (let i = 0; i < dados.length; i++) {
-        labels.push(dados[i].categoria);
-        valores.push(dados[i].taxaAfirmacao);
-    }
+function plotarGrafico(resposta, idGrafico) {
+    let labels = [];
+    let valores = [];
+    let config = {};
+    let canvasId = "";
+    
+    if (idGrafico == 'categorias') {
+        // Tratamento especial para separar categorias por TIPO
+        let labelsConhecimento = [];
+        let valoresConhecimento = [];
+        let labelsSocio = [];
+        let valoresSocio = [];
 
-    new Chart(canvasCategorias, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: '% de Afirmação/Acerto',
-                data: valores,
-                backgroundColor: '#0a3b1a', 
-                borderRadius: 8 
-            }]
-        },
-        options: {
-            indexAxis: 'y', // Barras horizontais
-            scales: {
-                x: { 
-                    max: 100,
-                    grid: { display: false } 
-                },
-                y: { 
-                    grid: { display: false } 
-                }
+        for (let i = 0; i < resposta.length; i++) {
+            if (resposta[i].tipo == 'Conhecimento') {
+                labelsConhecimento.push(resposta[i].categoria);
+                valoresConhecimento.push(resposta[i].taxaAfirmacao);
+            } else {
+                labelsSocio.push(resposta[i].categoria);
+                valoresSocio.push(resposta[i].taxaAfirmacao);
             }
         }
-    });
-}
 
-function plotarGraficoGeracoes(dados) {
-    const labels = [];
-    const valores = [];
-
-    for (let i = 0; i < dados.length; i++) {
-        labels.push(dados[i].geracao);
-        valores.push(dados[i].quantidade);
-    }
-
-    new Chart(canvasGeracoes, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Membros por Geração',
-                data: valores,
-                backgroundColor: '#d4af37', 
-                borderRadius: 6
-            }]
-        },
-        options: {
-            scales: {
-                x: { grid: { display: false } },
-                y: { grid: { display: false } }
-            }
-        }
-    });
-}
-
-function plotarGraficoCrescimento(dados) {
-    const labels = [];
-    const valores = [];
-
-    for (let i = 0; i < dados.length; i++) {
-        labels.push(dados[i].dataCadastro);
-        valores.push(dados[i].quantidade);
-    }
-
-    new Chart(canvasCrescimento, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Total Acumulado',
-                data: valores,
-                borderColor: '#0a3b1a',
-                backgroundColor: 'rgba(10, 59, 26, 0.1)',
-                fill: true,
-                tension: 0.4 // Curva suave
-            }]
-        },
-        options: {
-            scales: {
-                x: { grid: { display: false } },
-                y: { grid: { display: false } }
+        let configConhecimento = {
+            type: 'bar',
+            data: {
+                labels: labelsConhecimento,
+                datasets: [{ label: '% de Acerto', data: valoresConhecimento, backgroundColor: '#0a3b1a', borderRadius: 8 }]
             },
-            plugins: { legend: { display: false } }
+            options: { indexAxis: 'y', scales: { x: { max: 100 } } }
+        };
+
+        let coresSocio = labelsSocio.map(label => {
+            return label.includes('Hostilidade') ? '#8b0000' : '#d4af37';
+        });
+
+        let configSocio = {
+            type: 'bar',
+            data: {
+                labels: labelsSocio,
+                datasets: [{ label: 'Índice Mapeado (%)', data: valoresSocio, backgroundColor: coresSocio, borderRadius: 8 }]
+            },
+            options: { indexAxis: 'y', scales: { x: { max: 100 } } }
+        };
+
+        let myChartConhecimento = new Chart(document.getElementById('canvasCategoriasConhecimento'), configConhecimento);
+        let myChartSocio = new Chart(document.getElementById('canvasCategoriasSocio'), configSocio);
+
+        setTimeout(() => atualizarGraficoCategorias(myChartConhecimento, myChartSocio), 5000);
+        return; // Sai da função para não executar o código padrão abaixo
+    }
+
+    for (let i = 0; i < resposta.length; i++) {
+        if (idGrafico == 'etnia') {
+            labels.push(resposta[i].etnia);
+            valores.push(resposta[i].quantidade);
+        } else if (idGrafico == 'geracoes') {
+            labels.push(resposta[i].geracao);
+            valores.push(resposta[i].quantidade);
+        } else if (idGrafico == 'crescimento') {
+            labels.push(resposta[i].dataCadastro);
+            valores.push(resposta[i].quantidade);
+        }
+    }
+
+    if (idGrafico == 'etnia') {
+        config = { type: 'doughnut', data: { labels: labels, datasets: [{ data: valores, backgroundColor: ['#d4af37', '#8b5a2b', '#0a3b1a', '#cd853f', '#000000'] }] } };
+        canvasId = "canvasEtnia";
+    } else if (idGrafico == 'geracoes') {
+        config = { type: 'bar', data: { labels: labels, datasets: [{ label: 'Membros', data: valores, backgroundColor: '#d4af37' }] } };
+        canvasId = "canvasGeracoes";
+    } else if (idGrafico == 'crescimento') {
+        config = { type: 'line', data: { labels: labels, datasets: [{ label: 'Total Acumulado', data: valores, borderColor: '#0a3b1a', fill: true }] } };
+        canvasId = "canvasCrescimento";
+    }
+
+    let myChart = new Chart(document.getElementById(canvasId), config);
+    setTimeout(() => atualizarGrafico(idGrafico, config.data, myChart), 5000);
+}
+
+function atualizarGrafico(idGrafico, dadosAtuais, myChart) {
+    fetch(`/dashboard-admin/${idGrafico}`, { cache: 'no-store' }).then(function (response) {
+        if (response.ok) {
+            response.json().then(function (novoRegistro) {
+                let novosValores = [];
+                for (let i = 0; i < novoRegistro.length; i++) {
+                    novosValores.push(novoRegistro[i].quantidade);
+                }
+                dadosAtuais.datasets[0].data = novosValores;
+                myChart.update();
+                setTimeout(() => atualizarGrafico(idGrafico, dadosAtuais, myChart), 5000);
+            });
+        }
+    });
+}
+
+function atualizarGraficoCategorias(myChartConhecimento, myChartSocio) {
+    fetch(`/dashboard-admin/categorias`, { cache: 'no-store' }).then(function (response) {
+        if (response.ok) {
+            response.json().then(function (novoRegistro) {
+                let valConhecimento = [];
+                let valSocio = [];
+                
+                for (let i = 0; i < novoRegistro.length; i++) {
+                    if (novoRegistro[i].tipo == 'Conhecimento') valConhecimento.push(novoRegistro[i].taxaAfirmacao);
+                    else valSocio.push(novoRegistro[i].taxaAfirmacao);
+                }
+
+                myChartConhecimento.data.datasets[0].data = valConhecimento;
+                myChartConhecimento.update();
+
+                myChartSocio.data.datasets[0].data = valSocio;
+                myChartSocio.update();
+
+                setTimeout(() => atualizarGraficoCategorias(myChartConhecimento, myChartSocio), 5000);
+            });
         }
     });
 }

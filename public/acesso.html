@@ -91,5 +91,16 @@
     </footer>
 
     <script src="js/acesso.js"></script>
+    <script>
+        window.onload = function() {
+            if (sessionStorage.ID_USUARIO != undefined) {
+                if (sessionStorage.EMAIL_USUARIO === "yuri@zumbipalmeiras.com") {
+                    window.location = "dashboard/dashboard-admin.html";
+                } else {
+                    window.location = "quizz/pesquisa.html";
+                }
+            }
+        }
+    </script>
 </body>
 </html>

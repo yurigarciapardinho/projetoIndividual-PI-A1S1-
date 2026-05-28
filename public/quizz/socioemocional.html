@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zumbi Palmeiras - Questionário Socioemocional</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/quizz.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/sessao.js"></script>
+</head>
+
+<body onload="iniciarPagina()">
+    <header class="cabecalhoPrincipal">
+        <div class="logoSite">ZUMBI DOS PALMEIRAS</div>
+        <nav class="navegacaoPrincipal">
+            <a href="../index.html" class="linkNavegacao">Início</a>
+            <a href="../historia.html" class="linkNavegacao">História</a>
+        </nav>
+        <button class="botaoDestaque" onclick="window.location='../index.html'">SAIR</button> 
+    </header>
+
+    <main class="containerQuiz">
+        <h2 class="tituloSecaoQuiz">Questionário Socioemocional</h2>
+
+        <div id="divMenuInicial">
+            <button id="btnIniciarQuiz" class="botaoDestaqueSecundario" onclick="iniciarPesquisa()">INICIAR QUESTIONÁRIO SOCIOEMOCIONAL</button>
+        </div>
+
+        <div id="divPontuacao" class="placarQuiz" style="display: none;">
+            <div id="divPlacar" class="colunaPlacar">
+                <span class="linhaPlacar">Perguntas Respondidas: <span id="spanRespondidas" class="valorPlacar">0</span></span>
+            </div>
+            <div id="divFinal" class="fimPlacar" style="display: none;">
+                <span class="tituloFimPlacar">Fim do Questionário</span>
+                <span id="msgFinal" class="linhaPlacar">***</span>
+            </div>
+        </div>
+
+        <div id="divJogo" class="secaoJogoQuiz" style="display: none;">
+            <div class="blocoPerguntaQuiz">
+                <span>Pergunta atual: <span id="spanNumeroDaQuestaoAtual" class="textoDestaqueQuiz"></span> de <span id="qtdQuestoes" class="textoDestaqueQuiz"></span> perguntas.</span>
+            </div>
+
+            <div class="blocoPerguntaQuiz">
+                <span id="spanQuestaoExibida" class="textoDestaqueQuiz"></span>
+            </div>
+
+            <div class="blocoPerguntaQuiz">
+                <span><em>Escolha uma opção:</em></span>
+                <div class="grupoOpcoesQuiz">
+                    <span class="opcaoResposta">
+                        <input type="radio" id="opcaoSim" name="option" value="1" />
+                        <label for="opcaoSim">Sim</label>
+                    </span>
+                    <span class="opcaoResposta">
+                        <input type="radio" id="opcaoNao" name="option" value="0" />
+                        <label for="opcaoNao">Não</label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="grupoBotoesQuiz">
+                <button onclick="submeter()" id="btnSubmeter" class="botaoQuiz">Submeter resposta</button>
+                <button onclick="avancar()" id="btnProx" class="botaoQuiz" disabled>Avançar para próxima</button>
+                <button onclick="verResultados()" id="btnResultados" class="botaoDestaqueSecundario" style="display: none;">Ver Resultados</button>
+            </div>
+        </div>
+
+        <div id="divAreaGraficos" class="secaoGraficosQuiz" style="display:none;">
+            <h3 class="tituloSecaoQuiz">Seus Resultados vs Torcida</h3>
+            <div class="grupoGraficosQuiz">
+                <div class="caixaGraficoQuiz">
+                    <canvas id="graficoAcertos"></canvas>
+                </div>
+                <div class="caixaGraficoQuiz">
+                    <canvas id="graficoSentimento"></canvas>
+                </div>
+            </div>
+            <button class="botaoDestaqueSecundario" onclick="window.location='../index.html'" style="margin-top:20px;">Voltar para Home</button>
+        </div>
+    </main>
+
+    <footer class="rodapePrincipal">
+        <p class="textoRodape">2026 Zumbi dos Palmeiras. Site independente e autogestionado.</p>
+    </footer>
+</body>
+</html>
+<script>
+    let listaDeQuestoes = [];
+    
+    let numeroDaQuestaoAtual = 0;
+    let quantidadeDeQuestoes = 0;
+    let respondidas = 0;
+
+    function iniciarPagina() {
+        divPontuacao.style.display = "none";
+        divJogo.style.display = "none";
+        
+        if (sessionStorage.ID_USUARIO == undefined) {
+            alert("Você precisa estar logado para responder!");
+            window.location = "../acesso.html";
+            return;
+        }
+
+        let idUsuario = sessionStorage.ID_USUARIO;
+        fetch(`/quiz/resultados/${idUsuario}`).then(response => response.json()).then(data => {
+            let temDidatico = data.usuario.some(r => r.tipo === 'Conhecimento');
+            let temSocio = data.usuario.some(r => r.tipo === 'Socioemocional');
+
+            if (!temDidatico) {
+                // Nem começou o Didático ainda
+                window.location = "pesquisa.html";
+                return;
+            }
+
+            if (temSocio) {
+                // Já respondeu o socioemocional, exibe direto os resultados
+                divMenuInicial.style.display = "none";
+                verResultados();
+            }
+        });
+    }
+
+    function iniciarPesquisa() {
+        fetch("/quiz/perguntas/Socioemocional", { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (resposta) {
+                    listaDeQuestoes = resposta;
+                    quantidadeDeQuestoes = listaDeQuestoes.length;
+
+                    divPontuacao.style.display = "flex";
+                    divJogo.style.display = "flex";
+                    divMenuInicial.style.display = "none";
+                    qtdQuestoes.innerHTML = quantidadeDeQuestoes;
+
+                    preencherHTMLcomQuestaoAtual(0);
+
+                    btnSubmeter.disabled = false;
+                    btnProx.disabled = true;
+                });
+            } else {
+                alert("Erro ao buscar as perguntas socioemocionais.");
+            }
+        });
+    }
+
+    function preencherHTMLcomQuestaoAtual(index) {
+        habilitarAlternativas(true);
+        const questaoAtual = listaDeQuestoes[index];
+        numeroDaQuestaoAtual = index;
+        
+        spanNumeroDaQuestaoAtual.innerHTML = Number(index) + 1; 
+        spanQuestaoExibida.innerHTML = questaoAtual.descricao;
+    }
+
+    function submeter() {
+        const opcoes = document.getElementsByName("option"); 
+        
+        let temMarcado = false;
+        let valorSelecionado = null;
+
+        for (let i = 0; i < opcoes.length; i++) {
+            if (opcoes[i].checked) {
+                temMarcado = true;
+                valorSelecionado = opcoes[i].value;
+                break;
+            }
+        }
+
+        if (!temMarcado) {
+            alert("Não há opções escolhidas.");
+            return false;
+        }
+
+        btnSubmeter.disabled = true;
+        btnProx.disabled = false;
+        habilitarAlternativas(false);
+
+        enviarRespostaParaBanco(valorSelecionado);
+    }
+    
+    function enviarRespostaParaBanco(valorSelecionado) {
+        let idUsuario = sessionStorage.ID_USUARIO;
+        let idPergunta = listaDeQuestoes[numeroDaQuestaoAtual].idPergunta;
+        
+        fetch("/quiz/responder", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                idUsuarioServer: idUsuario,
+                idPerguntaServer: idPergunta,
+                valorRespostaServer: valorSelecionado
+            })
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                respondidas++;
+                spanRespondidas.innerHTML = respondidas;
+            }
+        });
+    }
+
+    function habilitarAlternativas(habilitar) {
+        let desabilitar = !habilitar;
+        opcaoSim.disabled = desabilitar;
+        opcaoNao.disabled = desabilitar;
+    }
+
+    function avancar() {
+        btnProx.disabled = true;
+        btnSubmeter.disabled = false;
+        
+        desmarcarRadioButtons();
+
+        if (numeroDaQuestaoAtual < quantidadeDeQuestoes - 1) {
+            preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual + 1);
+        } else {
+            finalizarJogo();
+        }
+    }
+
+    function desmarcarRadioButtons() {
+        const opcoes = document.getElementsByName("option");
+        for (let i = 0; i < opcoes.length; i++) {
+            opcoes[i].checked = false;
+        }
+    }
+
+    function finalizarJogo() {
+        msgFinal.innerHTML = "Obrigado por compartilhar sua vivência conosco!";
+        msgFinal.classList.add("mensagemSucessoQuiz"); 
+        divJogo.classList.add("quizInativo"); 
+        divFinal.style.display = "flex";
+
+        btnProx.disabled = true;
+        btnSubmeter.disabled = true;
+        
+        btnResultados.style.display = "block";
+    }
+
+    function verResultados() {
+        divAreaGraficos.style.display = "flex";
+        
+        let idUsuario = sessionStorage.ID_USUARIO;
+        fetch(`/quiz/resultados/${idUsuario}`).then(response => response.json()).then(data => {
+            let certasUsuario = 0;
+            let totalConhecimentoUsuario = 0;
+            for(let i=0; i<data.usuario.length; i++) {
+                if(data.usuario[i].tipo == 'Conhecimento') {
+                    totalConhecimentoUsuario++;
+                    if(data.usuario[i].valorResposta == data.usuario[i].gabarito) certasUsuario++;
+                }
+            }
+            let pctAcertoUser = (certasUsuario / totalConhecimentoUsuario) * 100 || 0;
+
+            let certasGeral = 0;
+            let totalGeral = 0;
+            for(let i=0; i<data.geral.length; i++) {
+                if(data.geral[i].tipo == 'Conhecimento') {
+                    let acertosAqui = data.geral[i].gabarito == 1 ? data.geral[i].qtdSim : (data.geral[i].totalRespostas - data.geral[i].qtdSim);
+                    certasGeral += acertosAqui;
+                    totalGeral += data.geral[i].totalRespostas;
+                }
+            }
+            let pctAcertoGeral = (certasGeral / totalGeral) * 100 || 0;
+
+            new Chart(document.getElementById('graficoAcertos'), {
+                type: 'bar',
+                data: {
+                    labels: ['Seus Acertos', 'Acertos da Torcida'],
+                    datasets: [{
+                        label: '% de Acerto no Quiz',
+                        data: [pctAcertoUser, pctAcertoGeral],
+                        backgroundColor: ['#d4af37', '#0a3b1a']
+                    }]
+                }
+            });
+
+            let labelsSocio = [];
+            let dataUserSocio = [];
+            let dataGeralSocio = [];
+
+            for(let i=0; i<data.geral.length; i++) {
+                if(data.geral[i].tipo == 'Socioemocional') {
+                    labelsSocio.push(data.geral[i].categoria);
+                    
+                    let pctGeral = (data.geral[i].qtdSim / data.geral[i].totalRespostas) * 100 || 0;
+                    dataGeralSocio.push(pctGeral);
+                    
+                    let pctUser = 0;
+                    let userResp = data.usuario.find(u => u.categoria == data.geral[i].categoria);
+                    if (userResp) {
+                        pctUser = userResp.valorResposta * 100; 
+                    }
+                    dataUserSocio.push(pctUser);
+                }
+            }
+
+            new Chart(document.getElementById('graficoSentimento'), {
+                type: 'bar',
+                data: {
+                    labels: labelsSocio,
+                    datasets: [
+                        {
+                            label: 'Suas Respostas (%)',
+                            data: dataUserSocio,
+                            backgroundColor: '#d4af37'
+                        },
+                        {
+                            label: 'Mapeamento da Torcida (%)',
+                            data: dataGeralSocio,
+                            backgroundColor: '#0a3b1a'
+                        }
+                    ]
+                },
+                options: {
+                    scales: { y: { max: 100 } }
+                }
+            });
+        });
+    }
+</script>

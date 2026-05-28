@@ -237,8 +237,8 @@ function logar() {
                         // Se for o Yuri, manda para a visão analítica geral
                         window.location = "/dashboard/dashboard-admin.html";
                     } else {
-                        // Se for qualquer outra pessoa, manda para a dashboard pessoal
-                        window.location = "/dashboard/dashboard-usuario.html"; 
+                        // Se for qualquer outra pessoa, manda para a pesquisa
+                        window.location = "/quizz/pesquisa.html"; 
                     }
                 })
             } else {

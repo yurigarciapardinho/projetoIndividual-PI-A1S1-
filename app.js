@@ -17,8 +17,9 @@ var app = express();
 
 var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
-var dashboardRouter = require("./src/routes/dashboard");
-
+var dashboardRouter = require("./src/routes/dashboardAdmin");// botar dash user
+var quizRouter = require("./src/routes/quiz");
+var dashboardAdminRouter = require("./src/routes/dashboardAdmin");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -29,6 +30,8 @@ app.use(cors());
 app.use("/", indexRouter);
 app.use("/usuarios", usuarioRouter);
 app.use("/dashboard", dashboardRouter);
+app.use("/quiz", quizRouter);
+app.use("/dashboard-admin", dashboardAdminRouter);
 
 app.listen(PORTA_APP, function () {
     console.log(`
