@@ -22,6 +22,64 @@ function mascaraData(inputDataNascimento) {
 // =========================================================
 // FUNÇÕES DE TELA E VALIDAÇÃO
 // =========================================================
+function carregarDominios() {
+    fetch("/dominios/etnias").then(function (resposta) {
+        if (resposta.ok) {
+            resposta.json().then(function (respostaJson) {
+                var selectEtnia = document.getElementById("selectEtnia");
+                respostaJson.forEach(function (etnia) {
+                    var option = document.createElement("option");
+                    option.value = etnia.idEtnia;
+                    option.innerHTML = etnia.descricao;
+                    selectEtnia.appendChild(option);
+                });
+            });
+        }
+    });
+
+    fetch("/dominios/zonas").then(function (resposta) {
+        if (resposta.ok) {
+            resposta.json().then(function (respostaJson) {
+                var selectZona = document.getElementById("selectZona");
+                respostaJson.forEach(function (zona) {
+                    var option = document.createElement("option");
+                    option.value = zona.idZona;
+                    option.innerHTML = zona.nome;
+                    selectZona.appendChild(option);
+                });
+            });
+        }
+    });
+}
+
+function carregarBairros() {
+    var selectZona = document.getElementById("selectZona");
+    var selectBairro = document.getElementById("selectBairro");
+    var idZona = selectZona.value;
+
+    selectBairro.innerHTML = '<option value="">Selecione um bairro</option>';
+
+    if (idZona == "") {
+        selectBairro.disabled = true;
+        return;
+    }
+
+    selectBairro.disabled = false;
+
+    fetch(`/dominios/bairros/${idZona}`).then(function (resposta) {
+        if (resposta.ok) {
+            resposta.json().then(function (respostaJson) {
+                respostaJson.forEach(function (bairro) {
+                    var option = document.createElement("option");
+                    option.value = bairro.idBairro;
+                    option.innerHTML = bairro.nome;
+                    selectBairro.appendChild(option);
+                });
+            });
+        }
+    });
+}
+
 function alternarTelas() {
     const modoLogin = telaLogin.style.display != 'none'
 
@@ -66,8 +124,8 @@ function validacoes() {
     const nomeInformado = inputNome.value.trim()
     const emailInformado = inputEmail.value.toLowerCase().trim()
     const dataNascimentoInformada = inputDataNascimento.value
-    const etniaInformada = selectEtnia.value.toLowerCase().trim()
-    const bairroInformado = inputBairro.value.toLowerCase().trim()
+    const etniaInformada = selectEtnia.value.trim()
+    const bairroInformado = selectBairro.value.trim()
     const senhaInformada = inputSenha.value
     const confirmacaoInformada = inputConfirmacao.value
 
@@ -149,7 +207,7 @@ function cadastrar() {
         const nomeInformado = inputNome.value.trim()
         const emailInformado = inputEmail.value.trim().toLowerCase()
         const etniaInformada = selectEtnia.value.trim()
-        const bairroInformado = inputBairro.value.trim()
+        const bairroInformado = selectBairro.value.trim()
         const senhaInformada = inputSenha.value
         
         // NOVO: Capturando os dados opcionais

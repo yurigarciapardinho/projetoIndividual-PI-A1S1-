@@ -6,7 +6,7 @@ function buscarKpis() {
             (SELECT COUNT(*) FROM usuario) as totalMembros,
             (SELECT COUNT(*) FROM usuario WHERE DATE(dtCriacao) = CURDATE()) as cadastrosHoje,
             (SELECT ROUND((SUM(r.valorResposta) / COUNT(*)) * 100, 0) FROM resposta r JOIN pergunta p ON r.fkPergunta = p.idPergunta WHERE p.descricao LIKE '%representado%') as indiceRepresentatividade,
-            (SELECT ROUND((SUM(CASE WHEN r.valorResposta = p.gabarito THEN 1 ELSE 0 END) / COUNT(*)) * 100, 0) FROM resposta r JOIN pergunta p ON r.fkPergunta = p.idPergunta WHERE p.tipo = 'Conhecimento') as taxaAcertos
+            (SELECT ROUND((SUM(CASE WHEN r.valorResposta = p.gabarito THEN 1 ELSE 0 END) / COUNT(*)) * 100, 0) FROM resposta r JOIN pergunta p ON r.fkPergunta = p.idPergunta JOIN questionario q ON p.fkQuestionario = q.idQuestionario WHERE q.tipo = 'Conhecimento') as taxaAcertos
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -14,9 +14,10 @@ function buscarKpis() {
 
 function buscarEtnia() {
     var instrucaoSql = `
-        SELECT etnia, COUNT(*) as quantidade 
-        FROM usuario 
-        GROUP BY etnia
+        SELECT e.descricao as etnia, COUNT(*) as quantidade 
+        FROM usuario u
+        JOIN etnia e ON u.fkEtnia = e.idEtnia
+        GROUP BY e.descricao
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -25,15 +26,17 @@ function buscarEtnia() {
 function buscarCategorias() {
     var instrucaoSql = `
         SELECT 
-            p.categoria, 
-            p.tipo,
+            c.nome as categoria, 
+            q.tipo,
             ROUND((SUM(CASE 
-                WHEN p.tipo = 'Conhecimento' AND r.valorResposta = p.gabarito THEN 1 
-                WHEN p.tipo = 'Socioemocional' AND r.valorResposta = 1 THEN 1 
+                WHEN q.tipo = 'Conhecimento' AND r.valorResposta = p.gabarito THEN 1 
+                WHEN q.tipo = 'Socioemocional' AND r.valorResposta = 1 THEN 1 
                 ELSE 0 END) / COUNT(*)) * 100, 0) as taxaAfirmacao 
         FROM resposta r 
         JOIN pergunta p ON r.fkPergunta = p.idPergunta 
-        GROUP BY p.categoria, p.tipo
+        JOIN categoria c ON p.fkCategoria = c.idCategoria
+        JOIN questionario q ON p.fkQuestionario = q.idQuestionario
+        GROUP BY c.nome, q.tipo
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);

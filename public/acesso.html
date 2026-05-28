@@ -51,17 +51,21 @@
                 <label class="rotuloCampo">Etnia:</label>
                 <select id="selectEtnia" class="inputYgp">
                     <option value="">Selecione</option>
-                    <option value="Preto">Preto</option>
-                    <option value="Pardo">Pardo</option>
-                    <option value="Branco">Branco</option>
-                    <option value="Indígena">Indígena</option>
-                    <option value="Amarelo">Amarelo</option>
+                </select>
+            </div>
+            
+            <div class="campo">
+                <label class="rotuloCampo">Sua Região/Zona:</label>
+                <select id="selectZona" class="inputYgp" onchange="carregarBairros()">
+                    <option value="">Selecione a região</option>
                 </select>
             </div>
             
             <div class="campo">
                 <label class="rotuloCampo">Seu bairro:</label>
-                <input type="text" id="inputBairro" class="inputYgp" placeholder="Ex: ZL - Itaquera">
+                <select id="selectBairro" class="inputYgp" disabled>
+                    <option value="">Selecione a zona primeiro</option>
+                </select>
             </div>
 
             <div class="campo">
@@ -93,6 +97,8 @@
     <script src="js/acesso.js"></script>
     <script>
         window.onload = function() {
+            carregarDominios(); // Nova função da V2
+            
             if (sessionStorage.ID_USUARIO != undefined) {
                 if (sessionStorage.EMAIL_USUARIO === "yuri@zumbipalmeiras.com") {
                     window.location = "dashboard/dashboard-admin.html";

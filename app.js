@@ -20,6 +20,7 @@ var usuarioRouter = require("./src/routes/usuarios");
 var dashboardRouter = require("./src/routes/dashboardAdmin");// botar dash user
 var quizRouter = require("./src/routes/quiz");
 var dashboardAdminRouter = require("./src/routes/dashboardAdmin");
+var dominiosRouter = require("./src/routes/dominios");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -32,6 +33,7 @@ app.use("/usuarios", usuarioRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/quiz", quizRouter);
 app.use("/dashboard-admin", dashboardAdminRouter);
+app.use("/dominios", dominiosRouter);
 
 app.listen(PORTA_APP, function () {
     console.log(`
