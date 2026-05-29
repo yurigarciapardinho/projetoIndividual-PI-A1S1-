@@ -104,6 +104,7 @@
         }
 
         let idUsuario = sessionStorage.ID_USUARIO;
+        
         fetch(`/quiz/resultados/${idUsuario}`).then(response => response.json()).then(data => {
             let temDidatico = data.usuario.some(r => r.tipo === 'Conhecimento');
             let temSocio = data.usuario.some(r => r.tipo === 'Socioemocional');
@@ -262,11 +263,9 @@
             
             for (let i = 0; i < data.geral.length; i++) {
                 if (data.geral[i].tipo == 'Conhecimento') {
-                    // Descobre se a resposta certa no banco era SIM (1) ou NÃO (0)
                     let gabarito = data.geral[i].gabarito; 
                     
-                    // Se o gabarito for 1, somamos quem respondeu SIM (qtdSim)
-                    // Se o gabarito for 0, somamos quem respondeu NÃO (total - qtdSim)
+                 
                     let acertosAqui = gabarito == 1 ? Number(data.geral[i].qtdSim) : (Number(data.geral[i].totalRespostas) - Number(data.geral[i].qtdSim));
                     
                     certasGeral += acertosAqui;

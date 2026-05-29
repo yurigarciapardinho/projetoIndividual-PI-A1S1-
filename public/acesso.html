@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/acesso.css">
 </head>
-<body>
+<body onload="validarSessao()">
 
     <header class="cabecalhoPrincipal">
         <div class="logoSite" onclick="window.location='index.html'" style="cursor:pointer">ZUMBI DOS PALMEIRAS</div>
@@ -96,8 +96,7 @@
 
     <script src="js/acesso.js"></script>
     <script>
-        window.onload = function() {
-            carregarDominios(); // Nova função da V2
+        function validarSessao(){
             
             if (sessionStorage.ID_USUARIO != undefined) {
                 if (sessionStorage.EMAIL_USUARIO === "yuri@zumbipalmeiras.com") {
@@ -106,7 +105,11 @@
                     window.location = "quizz/pesquisa.html";
                 }
             }
+
+            carregarDominios()
+
         }
+        
     </script>
 </body>
 </html>

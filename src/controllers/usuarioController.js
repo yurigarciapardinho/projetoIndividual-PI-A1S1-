@@ -56,7 +56,6 @@ function autenticar(req, res) {
     } else {
         usuarioModel.autenticar(email, senha)
             .then(function (resultado) {
-                // Se achou exatamente 1 usuário, devolve os dados dele
                 if (resultado.length == 1) {
                     res.status(200).json(resultado[0]);
                 } else if (resultado.length == 0) {

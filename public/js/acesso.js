@@ -1,7 +1,6 @@
-// =========================================================
+
 // (DD/MM/AAAA)
 // oninput="mascaraData(this)"
-// =========================================================
 function mascaraData(inputDataNascimento) {
     // Pega o valor do campo de data de nascimento e remove tudo que não é número
     let valor = inputDataNascimento.value.replace(/\D/g, ''); 
@@ -19,9 +18,6 @@ function mascaraData(inputDataNascimento) {
     inputDataNascimento.value = valor;
 }
 
-// =========================================================
-// FUNÇÕES DE TELA E VALIDAÇÃO
-// =========================================================
 function carregarDominios() {
     fetch("/dominios/etnias").then(function (resposta) {
         if (resposta.ok) {
@@ -198,9 +194,7 @@ function validacoes() {
     return true
 }
 
-// =========================================================
-// FUNÇÕES DE COMUNICAÇÃO COM A API (FETCH)
-// =========================================================
+
 function cadastrar() {
     const dadosValidos = validacoes()
     if (dadosValidos) {
@@ -210,7 +204,6 @@ function cadastrar() {
         const bairroInformado = selectBairro.value.trim()
         const senhaInformada = inputSenha.value
         
-        // NOVO: Capturando os dados opcionais
         const fotoInformada = inputFoto.value.trim()
         const indicadorInformado = inputIndicador.value.trim()
 
