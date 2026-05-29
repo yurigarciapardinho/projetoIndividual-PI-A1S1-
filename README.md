@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./public/assets/imgs/bannerZDP.png" alt="Banner Zumbi dos Palmeiras" width="400px" style="margin-bottom: 20px;">
+  <img src="./public/assets/imgs/BANNERzdpBranco.png" alt="Banner Zumbi dos Palmeiras" width="1000px" style="margin-bottom: 20px;">
   
   # Projeto Zumbi Palmeiras
 </div>
