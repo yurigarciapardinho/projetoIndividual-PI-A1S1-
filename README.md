@@ -1,48 +1,52 @@
-# Projeto Zumbi Palmeiras
+<div align="center">
+  <img src="./public/assets/imgs/bannerZDP.png" alt="Banner Zumbi dos Palmeiras" width="400px" style="margin-bottom: 20px;">
+  
+  # Projeto Zumbi Palmeiras
+</div>
 
-Este é o repositório do Projeto Individual do Semestre, focado em trazer uma conscientização e reflexão sobre a história e representatividade no Palmeiras.
+Este é o repositório oficial do Projeto Individual do Semestre da São Paulo Tech School (SPTech). Uma plataforma interativa voltada para apresentar e fortalecer o movimento "Zumbi dos Palmeiras" — um movimento político de resistência focado na representatividade preta e periférica dentro da torcida do Palmeiras.
 
-## Objetivo
-Criar uma plataforma de conscientização contendo um sistema de cadastro, autenticação de usuários, uma pesquisa (Quiz) estruturada com banco de dados e um Dashboard Administrativo para medir o engajamento e as vozes da bancada. 
+## 📖 Contexto e Propósito
 
-## Tecnologias Utilizadas
-- **Frontend:** HTML, CSS, JavaScript e Chart.js
-- **Backend:** Node.js, Express.js
-- **Banco de Dados:** MySQL
+Inspirado na frase de um dos fundadores do movimento, Renato: *"é muito mais que futebol"*. O projeto nasce a partir do incômodo com o estereótipo do torcedor palmeirense como um "playboy branco". O encontro com a bandeira do "5P" (**Preto, Pobre, Periculoso, Periférico, Palmeirense**) no Allianz Parque guiou a criação de uma ferramenta que evidencia a realidade material, a justiça e a ocupação de espaço na bancada. 
 
-## Estrutura do Banco de Dados
-O banco `zumbiPalmeiras` contém as seguintes tabelas principais:
-1. `usuario`: Armazena dados dos usuários (nome, email, senha, etnia, bairro, dataNascimento).
-2. `pergunta`: Contém as questões da pesquisa.
-3. `resposta`: Tabela associativa que relaciona o usuário à pergunta, gravando a sua resposta (1 para Sim e 0 para Não).
+Alinhado à **ODS 16** (Paz, Justiça e Instituições Eficazes), a plataforma busca mapear a verdadeira identidade demográfica e o índice de pertencimento da torcida, combatendo o racismo estrutural através de dados.
 
-## Principais Funcionalidades
+##  Principais Funcionalidades
 
-### 1. Pesquisa de Consciência (Quiz)
-As perguntas são carregadas de forma dinâmica diretamente do Banco de Dados (`/quiz/perguntas`).
-Ao final da pesquisa, os resultados ("Sim" ou "Não") são salvos para compor os gráficos do Dashboard.
+A plataforma web foi desenvolvida com foco em coletar, organizar e expor os dados da torcida:
 
-### 2. Dashboard Administrativo
-Área restrita ao administrador. O dashboard utiliza a estrutura recomendada (`obterDadosGrafico`, `plotarGrafico` e `atualizarGrafico`) para trazer dados em tempo real ou agregados sobre:
-- **A Nossa Face:** Gráfico de Rosca com a distribuição étnica geral.
-- **Consciência vs. Vivência:** Gráfico de Barras verticais com a porcentagem de acertos/afirmações nas perguntas.
-- **Gerações da Bancada:** Gráfico de Barras distribuindo os membros por faixa etária (Sementes, Juventude, Resistência, Ancestralidade).
-- **A Marcha do Movimento:** Gráfico de Linha com a evolução de novos cadastros ao longo do tempo.
+1. **Autenticação e Cadastro (5P):** Sistema de registro seguro de usuários, mapeando dados vitais como etnia, idade e bairro.
+2. **Quiz / Pesquisa de Vivência:** Um questionário dinâmico consumido diretamente do Banco de Dados para medir a vivência e consciência histórica do torcedor.
+3. **Dashboard Administrativo:** Um painel exclusivo para administração que renderiza gráficos em tempo real sobre o engajamento:
+   - **A Nossa Face:** Gráfico de rosca evidenciando a distribuição étnica.
+   - **Consciência vs. Vivência:** Gráfico de barras com a porcentagem de acertos na pesquisa.
+   - **Gerações da Bancada:** Separação automática por idade (Sementes, Juventude, Resistência, Ancestralidade).
+   - **A Marcha do Movimento:** Gráfico de linhas demonstrando a evolução de novos cadastros.
 
-## Como Executar o Projeto
+##  Stack Técnica
 
-1. Certifique-se de ter o Node.js e o MySQL (Workbench) instalados.
-2. Rode o script do banco de dados localizado em `src/database/script-tabelas.sql`.
-3. Abra o terminal na raiz do projeto e instale as dependências:
+- **Frontend:** HTML5, CSS3, JavaScript (Vanilla) e [Chart.js](https://www.chartjs.org/)
+- **Backend:** Node.js com Express.js
+- **Banco de Dados:** MySQL (Arquitetura estruturada para VMs Linux)
+
+## ⚙️ Como Executar o Projeto Localmente
+
+1. Certifique-se de ter o **Node.js** e o **MySQL Workbench** instalados.
+2. Clone este repositório.
+3. Crie o banco de dados e as tabelas rodando o script localizado em `src/database/script-tabelas.sql`. (Há também um arquivo `inserts.sql` caso queira popular com dados de teste).
+4. Abra o terminal na raiz do projeto e instale as dependências:
    ```bash
    npm install
    ```
-4. Ajuste as credenciais de acesso ao banco (usuário e senha) no arquivo `src/database/config.js` (ou use um arquivo `.env`).
-5. Inicie o servidor:
+5. Ajuste as credenciais de acesso ao banco (usuário e senha) no arquivo `src/database/config.js` (ou utilizando o modelo do `.env.dev`).
+6. Inicie o servidor Node:
    ```bash
    npm start
    ```
-6. Acesse a aplicação através do navegador em `http://localhost:3333`.
+7. Acesse a aplicação através do navegador em `http://localhost:3333`.
 
-## Desenvolvedor
-**Yuri Pardinho** - Projeto Individual (PI)
+## 🧑‍💻 Desenvolvedor
+
+**Yuri Garcia Pardinho**  
+Projeto Individual (PI) - São Paulo Tech School, 2026.
